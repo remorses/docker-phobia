@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "ES2017",
+        "module": "commonjs",
+        "allowJs": true,
+        "moduleResolution": "Node",
+        "lib": [
+            "es2022",
+            "es2017",
+            "es7",
+            "es6"
+            // "dom"
+        ],
+        "declaration": true,
+        "declarationMap": true,
+        "strict": true,
+        "downlevelIteration": true,
+        "esModuleInterop": true,
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "jsx": "react",
+        "skipLibCheck": true
+    }
+}
