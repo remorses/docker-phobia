@@ -33,8 +33,12 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	// Send a response
-	fmt.Fprintf(w, "Image %s analyzed successfully\n%s", userImage, json)
+	// Send a response with the json
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(json))
+	// finish
+	return
+
 }
 
 func analyzeImage(userImage string) (string, error) {
@@ -85,19 +89,31 @@ func fileTreeToJson(tree *filetree.FileTree) (string, error) {
 	enc.SetIndent("", "  ") // Use two spaces for indentation
 	enc.SetEscapeHTML(false)
 	newNodes := RemoveCycles(tree.Root)
-	err := enc.Encode(newNodes)
+	output := JsonOutput{
+		Tree: newNodes[0],
+	}
+	if output.Tree.Name == "" {
+		output.Tree.Name = "root"
+	}
+	err := enc.Encode(output)
 	if err != nil {
 		return "", err
 	}
 	return buf.String(), nil
 }
 
+type JsonOutput struct {
+	Tree *Node `json:"tree"`
+}
+
 // Node represents a node in the new tree without cycles.
+// rename all fields to lowercase in json output
 type Node struct {
-	Size     int64
-	Name     string
-	Data     filetree.NodeData
-	Children []*Node
+	Size     int64             `json:"size,omitempty"`
+	Name     string            `json:"name,omitempty"`
+	Data     filetree.NodeData `json:"data,omitempty"`
+	Path     string            `json:"path,omitempty"`
+	Children []*Node           `json:"children,omitempty"`
 }
 
 // RemoveCycles creates a new tree without cycles by removing the nodes that cause the cycle.
@@ -119,8 +135,9 @@ func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNo
 	newNode := &Node{
 		Size: node.Size,
 		Name: node.Name,
+
 		// Data: node.Data,
-		// Path: node.Path(),
+		Path: node.Path(),
 	}
 
 	for _, child := range node.Children {
