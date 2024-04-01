@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"net/url"
+	"sort"
 
 	"encoding/json"
 	"fmt"
@@ -33,7 +34,7 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	println("Analyzing image: ", userImage)
-	json, err := analyzeImage(userImage)
+	output, err := analyzeImage(userImage)
 	if err != nil {
 
 		logrus.Error(err)
@@ -43,13 +44,26 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// Send a response with the json
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(json))
+	var buf bytes.Buffer
+	enc := json.NewEncoder(&buf)
+	enc.SetIndent("", "  ") // Use two spaces for indentation
+	enc.SetEscapeHTML(false)
+
+	// node.ComputeSize()
+
+	err = enc.Encode(output)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Write(buf.Bytes())
 	// finish
 	return
 
 }
 
-func analyzeImage(userImage string) (string, error) {
+func analyzeImage(userImage string) (*JsonOutput, error) {
 	// Get the "image" parameter from the URL path
 	sourceStr := "docker"
 	sourceType, imageStr := dive.DeriveImageSource(userImage)
@@ -57,64 +71,102 @@ func analyzeImage(userImage string) (string, error) {
 
 		sourceType = dive.ParseImageSource(sourceStr)
 		if sourceType == dive.SourceUnknown {
-			return "", errors.Errorf("unable to determine image source: %v\n", sourceStr)
+			return nil, errors.Errorf("unable to determine image source: %v\n", sourceStr)
 		}
 		imageStr = userImage
 	}
 	imageResolver, err := dive.GetImageResolver(sourceType)
 	if err != nil {
 
-		return "", errors.Wrap(err, "unable to determine image provider")
+		return nil, errors.Wrap(err, "unable to determine image provider")
 	}
 	img, err := imageResolver.Fetch(imageStr)
 	if err != nil {
-		return "", fmt.Errorf("unable to fetch image: %v", err)
+		return nil, fmt.Errorf("unable to fetch image: %v", err)
 	}
 
 	result, err := img.Analyze()
 	if err != nil {
-		return "", fmt.Errorf("unable to analyze: %v", err)
+		return nil, fmt.Errorf("unable to analyze: %v", err)
 	}
 
-	treeStack, failedPaths, err := filetree.StackTreeRange(result.RefTrees, 0, 0)
+	treeStack, failedPaths, err := filetree.StackTreeRange(result.RefTrees, 0, len(result.RefTrees)-1)
 	if len(failedPaths) > 0 {
-		return "", fmt.Errorf("expected no filepath errors, got %d", len(failedPaths))
+		return nil, fmt.Errorf("expected no filepath errors, got %d", len(failedPaths))
 	}
 	if err != nil {
-		return "", fmt.Errorf("unable to stack trees: %v", err)
+		return nil, fmt.Errorf("unable to stack trees: %v", err)
 	}
-	json, err := fileTreeToJson(treeStack)
-	if err != nil {
-		return "", fmt.Errorf("unable to convert tree to json: %v", err)
+	node := RemoveCycles(treeStack.Root)
+
+	// create a map from file path to layer index
+	filePathToLayerIndex := make(map[string]int)
+
+	// sort layers by command
+	sort.Slice(result.Layers, func(i, j int) bool {
+		return result.Layers[i].Index < result.Layers[j].Index
+	})
+
+	for i, layer := range result.Layers {
+		layer.Tree.VisitDepthChildFirst(func(node *filetree.FileNode) error {
+
+			if node.Data.DiffType == filetree.Added {
+				filePathToLayerIndex[node.Path()] = i
+			}
+			return nil
+		},
+			func(fn *filetree.FileNode) bool {
+				return true
+			})
+
 	}
 
-	return json, nil
-}
-
-func fileTreeToJson(tree *filetree.FileTree) (string, error) {
-	var buf bytes.Buffer
-	enc := json.NewEncoder(&buf)
-	enc.SetIndent("", "  ") // Use two spaces for indentation
-	enc.SetEscapeHTML(false)
-	node := RemoveCycles(tree.Root)
-
-	// node.ComputeSize()
-
+	allNodes := bfs(node)
+	for _, node := range allNodes {
+		// mark each node with the layer it belongs to
+		if node.Path != "" {
+			node.Layer = filePathToLayerIndex[node.Path]
+		}
+	}
+	layers := make([]Layer, len(result.Layers))
+	for i, layer := range result.Layers {
+		layers[i] = Layer{
+			Command: layer.Command,
+		}
+	}
 	output := JsonOutput{
-		Tree: node,
+		Layers: layers,
+		Tree:   node,
 	}
 	if output.Tree.Name == "" {
 		output.Tree.Name = "root"
 	}
-	err := enc.Encode(output)
-	if err != nil {
-		return "", err
+	return &output, nil
+
+}
+
+type Layer struct {
+	Command string `json:"command"`
+}
+
+func bfs(node *Node) []*Node {
+	var queue []*Node
+	var result []*Node
+	queue = append(queue, node)
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+		result = append(result, current)
+		for _, child := range current.Children {
+			queue = append(queue, child)
+		}
 	}
-	return buf.String(), nil
+	return result
 }
 
 type JsonOutput struct {
-	Tree *Node `json:"tree"`
+	Layers []Layer `json:"layers"`
+	Tree   *Node   `json:"tree"`
 }
 
 // Node represents a node in the new tree without cycles.
@@ -126,6 +178,7 @@ type Node struct {
 	Data     filetree.NodeData `json:"-"`
 	Path     string            `json:"path,omitempty"`
 	Children []*Node           `json:"children,omitempty"`
+	Layer    int               `json:"layer,omitempty"`
 }
 
 // func (node *Node) ComputeSize() {

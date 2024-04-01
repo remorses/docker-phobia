@@ -18,6 +18,7 @@ async function analyzeImage(image) {
 
 interface JsonOutput {
     tree: ImageNode
+    layers: { command: string }[]
 }
 
 interface ImageNode {
@@ -30,7 +31,7 @@ interface ImageNode {
 export default async function Home({ params: { image } }) {
     let imageStr = image.map((x) => decodeURIComponent(x)).join('/')
     console.log('image', imageStr)
-    const { tree } = await analyzeImage(imageStr)
+    const { tree, layers } = await analyzeImage(imageStr)
 
-    return <TreemapDemo data={tree} />
+    return <TreemapDemo layers={layers} data={tree} />
 }

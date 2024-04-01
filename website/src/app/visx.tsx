@@ -1,4 +1,8 @@
 'use client'
+import { schemeSet1 } from 'd3-scale-chromatic'
+
+import { scaleOrdinal } from '@visx/scale'
+
 import * as d3 from 'd3'
 import { Group } from '@visx/group'
 import {
@@ -30,10 +34,6 @@ const color2 = '#4281a4'
 const background = '#114b5f'
 
 const gbInBytes = 1024 * 1024
-const colorScale = scaleLinear<string>({
-    domain: [0, gbInBytes],
-    range: [color2, color1],
-})
 
 const data = stratify<Shakespeare>()
     .id((d) => d.id)
@@ -48,7 +48,7 @@ export type TreemapProps = {
     margin?: { top: number; right: number; bottom: number; left: number }
 }
 
-export function TreemapDemo({ data, margin = defaultMargin }: TreemapProps) {
+export function TreemapDemo({ data, layers, margin = defaultMargin }) {
     const { height, width } = useWindowSize()
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
@@ -59,6 +59,7 @@ export function TreemapDemo({ data, margin = defaultMargin }: TreemapProps) {
     const treemap = d3treemap()
         .tile(treemapBinary)
         .size([xMax, yMax])
+
         .padding(6)
         .paddingTop(20)
 
@@ -66,6 +67,11 @@ export function TreemapDemo({ data, margin = defaultMargin }: TreemapProps) {
         useState<HierarchyRectangularNode<any> | null>(root)
 
     const treemapElem = treemap(zoomedNode as any)
+
+    const colorScale = scaleOrdinal({
+        domain: layers?.map((l, i) => i),
+        range: schemeSet1,
+    })
 
     console.log(zoomedNode.depth, zoomedNode)
     return width < 10 ? null : (
@@ -82,8 +88,9 @@ export function TreemapDemo({ data, margin = defaultMargin }: TreemapProps) {
                         {treemapElem
 
                             .descendants()
+
                             // .reverse()
-                            .filter((node) => node.depth < zoomedNode.depth + 16)
+                            .filter((node) => node.depth < zoomedNode.depth + 4)
                             .map((node, i) => {
                                 const nodeWidth = node.x1 - node.x0
                                 const nodeHeight = node.y1 - node.y0

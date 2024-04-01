@@ -19,6 +19,7 @@
         "@visx/text": "^3.3.0",
         "d3": "^7.9.0",
         "d3-hierarchy": "^3.1.2",
+        "d3-scale-chromatic": "^3.1.0",
         "next": "14.1.4",
         "react": "^18",
         "react-d3-treemap": "^1.0.29",
