@@ -9,6 +9,13 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@types/d3-hierarchy": "^3.1.7",
+        "@visx/group": "latest",
+        "@visx/hierarchy": "latest",
+        "@visx/mock-data": "latest",
+        "@visx/responsive": "latest",
+        "@visx/scale": "latest",
+        "@visx/text": "^3.3.0",
         "d3-hierarchy": "^3.1.2",
         "next": "14.1.4",
         "react": "^18",

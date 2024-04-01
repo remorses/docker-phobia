@@ -5,27 +5,7 @@ import { useEffect, useState } from 'react'
 import TreeMap from 'react-d3-treemap'
 import 'react-d3-treemap/dist/react.d3.treemap.css'
 
-function useWindowSize() {
-    const [size, setSize] = useState({
-        width: window.innerWidth,
-        height: window.innerHeight,
-    })
 
-    useEffect(() => {
-        const handleResize = () => {
-            setSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            })
-        }
-        window.addEventListener('resize', handleResize)
-        return () => {
-            window.removeEventListener('resize', handleResize)
-        }
-    }, [])
-
-    return size
-}
 
 export function Chart({ data }) {
     console.log('data', data)
@@ -37,7 +17,7 @@ export function Chart({ data }) {
                 width={width}
                 data={data}
                 // valueUnit={''}
-                levelsToDisplay={3}
+                levelsToDisplay={5}
                 // valuePropInData='value'
                 valueFn={(x) => formatFileSize(x)}
                 namePropInData='path'

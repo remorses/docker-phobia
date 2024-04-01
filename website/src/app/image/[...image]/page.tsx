@@ -1,6 +1,7 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/treemap
 import { Chart } from 'website/src/app/chart'
+import { TreemapDemo } from 'website/src/app/visx'
 
 const baseUrl = new URL('http://localhost:8080')
 async function analyzeImage(image) {
@@ -29,7 +30,7 @@ interface ImageNode {
 export default async function Home({ params: { image } }) {
     let imageStr = image.map((x) => decodeURIComponent(x)).join('/')
     console.log('image', imageStr)
-    const { tree } = await analyzeImage(imageStr)
+    // const { tree } = await analyzeImage(imageStr)
 
-    return <Chart data={tree} />
+    return <TreemapDemo />
 }
