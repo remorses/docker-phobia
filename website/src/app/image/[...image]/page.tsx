@@ -4,7 +4,9 @@ import { Chart } from 'website/src/app/chart'
 
 const baseUrl = new URL('http://localhost:8080')
 async function analyzeImage(image) {
-    const response = await fetch(new URL('/analyze/' + image, baseUrl), {
+    const u = new URL('/analyze/' + encodeURIComponent(image), baseUrl)
+    console.log('fetching', u.toString())
+    const response = await fetch(u, {
         method: 'POST',
     })
     if (!response.ok) {
@@ -24,8 +26,10 @@ interface ImageNode {
     children?: ImageNode[]
 }
 
-export default async function Home() {
-    const { tree } = await analyzeImage('postgres')
-    
+export default async function Home({ params: { image } }) {
+    let imageStr = image.map((x) => decodeURIComponent(x)).join('/')
+    console.log('image', imageStr)
+    const { tree } = await analyzeImage(imageStr)
+
     return <Chart data={tree} />
 }

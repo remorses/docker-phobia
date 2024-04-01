@@ -2,6 +2,8 @@ package main
 
 import (
 	"bytes"
+	"net/url"
+
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -15,7 +17,7 @@ import (
 
 func main() {
 	r := mux.NewRouter()
-	r.HandleFunc("/analyze/{image}", imageAnalyzerHandler).Methods("POST", "GET")
+	r.HandleFunc("/analyze/{image:.*}", imageAnalyzerHandler).Methods("POST", "GET")
 
 	fmt.Println("Server listening on http://localhost:8080")
 	http.ListenAndServe(":8080", r)
@@ -23,11 +25,17 @@ func main() {
 
 func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	userImage := vars["image"]
+	_userImage := vars["image"]
+	userImage, err := url.QueryUnescape(_userImage)
+	if err != nil {
+		logrus.Error(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	println("Analyzing image: ", userImage)
 	json, err := analyzeImage(userImage)
 	if err != nil {
 
-		// fmt.Printf("%+v\n", err)
 		logrus.Error(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 
