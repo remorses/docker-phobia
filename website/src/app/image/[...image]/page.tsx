@@ -30,7 +30,7 @@ interface ImageNode {
 export default async function Home({ params: { image } }) {
     let imageStr = image.map((x) => decodeURIComponent(x)).join('/')
     console.log('image', imageStr)
-    // const { tree } = await analyzeImage(imageStr)
+    const { tree } = await analyzeImage(imageStr)
 
-    return <TreemapDemo />
+    return <TreemapDemo data={tree} />
 }

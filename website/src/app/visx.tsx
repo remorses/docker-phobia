@@ -1,4 +1,5 @@
 'use client'
+import * as d3 from 'd3'
 import { Group } from '@visx/group'
 import {
     Treemap,
@@ -28,8 +29,9 @@ const color1 = '#f3e9d2'
 const color2 = '#4281a4'
 const background = '#114b5f'
 
+const gbInBytes = 1024 * 1024
 const colorScale = scaleLinear<string>({
-    domain: [0, Math.max(...shakespeare.map((d) => d.size ?? 0))],
+    domain: [0, gbInBytes],
     range: [color2, color1],
 })
 
@@ -46,11 +48,13 @@ export type TreemapProps = {
     margin?: { top: number; right: number; bottom: number; left: number }
 }
 
-export function TreemapDemo({ margin = defaultMargin }: TreemapProps) {
+export function TreemapDemo({ data, margin = defaultMargin }: TreemapProps) {
     const { height, width } = useWindowSize()
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
-    const root = hierarchy(data).sort((a, b) => (b.value || 0) - (a.value || 0))
+    const root = hierarchy(data)
+        .sort((a, b) => (b.value || 0) - (a.value || 0))
+        .sum((d) => d.value || 0)
 
     const treemap = d3treemap()
         .tile(treemapBinary)
@@ -79,7 +83,7 @@ export function TreemapDemo({ margin = defaultMargin }: TreemapProps) {
 
                             .descendants()
                             // .reverse()
-                            .filter((node) => node.depth < zoomedNode.depth + 4)
+                            .filter((node) => node.depth < zoomedNode.depth + 16)
                             .map((node, i) => {
                                 const nodeWidth = node.x1 - node.x0
                                 const nodeHeight = node.y1 - node.y0
@@ -97,22 +101,27 @@ export function TreemapDemo({ margin = defaultMargin }: TreemapProps) {
                                             width={nodeWidth}
                                             height={nodeHeight}
                                             stroke={'#000'}
+                                            // opacity={d3
+                                            //     .scaleLinear()
+                                            //     .domain([0, 2, 6])
+                                            //     .range([1, 1, 0])(node.depth)}
                                             strokeWidth={2}
                                             fill={colorScale(node.value || 0)}
                                         />
-                                        {nodeWidth > 50 && (
+                                        {nodeWidth > 50 && nodeHeight > 9 && (
                                             <Text
                                                 fill='#000'
                                                 fontSize={9}
-                                                dy={9 }
+                                                dy={9}
                                                 dx={4}
                                                 // limit text visibility inside the rect
                                                 width={nodeWidth}
+                                                height={nodeHeight}
                                                 textAnchor='start'
                                                 verticalAnchor='start'
                                                 pointerEvents='none'
                                             >
-                                                {node.data.id}
+                                                {node.data.name}
                                             </Text>
                                         )}
                                     </Group>
