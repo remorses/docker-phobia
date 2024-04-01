@@ -4,6 +4,7 @@ import {
     schemeSet2,
     schemeSet3,
     schemeBlues,
+    schemeBuGn,
 } from 'd3-scale-chromatic'
 
 import { scaleOrdinal } from '@visx/scale'
@@ -33,6 +34,7 @@ import shakespeare, { Shakespeare } from '@visx/mock-data/lib/mocks/shakespeare'
 import { scaleLinear } from '@visx/scale'
 import { useState } from 'react'
 import { useWindowSize } from 'website/src/app/hooks'
+import { scheme } from 'website/src/app/colors'
 
 const color1 = '#f3e9d2'
 const color2 = '#4281a4'
@@ -73,13 +75,12 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
 
     const treemapElem = treemap(zoomedNode as any)
 
-    console.log({ schemeSet1: schemeSet1.length, layers: layers.length })
+    const step = Math.ceil(scheme.length / layers.length)
     const colorScale = scaleOrdinal({
         domain: layers.map((l, i) => i),
-        range: [...schemeSet1, ...schemeSet1, ...schemeSet1].slice(
-            0,
-            layers.length,
-        ),
+        // skip some steps so scheme len is same as layers len
+
+        range: scheme.filter((_, i) => i % step === 0),
     })
 
     const totalSize = zoomedNode.value || 0
