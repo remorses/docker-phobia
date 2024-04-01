@@ -193,7 +193,7 @@ type Node struct {
 	Name string `json:"name"`
 	// omit this in json
 	Data     filetree.NodeData `json:"-"`
-	Path     string            `json:"path,omitempty"`
+	Path     string            `json:"-"`
 	Children []*Node           `json:"children,omitempty"`
 	Layer    int               `json:"layer,omitempty"`
 }
