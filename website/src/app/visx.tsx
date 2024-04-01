@@ -1,5 +1,10 @@
 'use client'
-import { schemeSet1 } from 'd3-scale-chromatic'
+import {
+    schemeSet1,
+    schemeSet2,
+    schemeSet3,
+    schemeBlues,
+} from 'd3-scale-chromatic'
 
 import { scaleOrdinal } from '@visx/scale'
 
@@ -68,12 +73,16 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
 
     const treemapElem = treemap(zoomedNode as any)
 
+    console.log({ schemeSet1: schemeSet1.length, layers: layers.length })
     const colorScale = scaleOrdinal({
-        domain: layers?.map((l, i) => i),
-        range: schemeSet1,
+        domain: layers.map((l, i) => i),
+        range: [...schemeSet1, ...schemeSet1, ...schemeSet1].slice(
+            0,
+            layers.length,
+        ),
     })
 
-    console.log(zoomedNode.depth, zoomedNode)
+    const totalSize = zoomedNode.value || 0
     return width < 10 ? null : (
         <div>
             <div>
@@ -90,7 +99,8 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
                             .descendants()
 
                             // .reverse()
-                            .filter((node) => node.depth < zoomedNode.depth + 4)
+                            // .filter((node) => node.value >= totalSize / 200)
+
                             .map((node, i) => {
                                 const nodeWidth = node.x1 - node.x0
                                 const nodeHeight = node.y1 - node.y0
@@ -113,7 +123,9 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
                                             //     .domain([0, 2, 6])
                                             //     .range([1, 1, 0])(node.depth)}
                                             strokeWidth={2}
-                                            fill={colorScale(node.value || 0)}
+                                            fill={colorScale(
+                                                node.data.layer || 0,
+                                            )}
                                         />
                                         {nodeWidth > 50 && nodeHeight > 9 && (
                                             <Text
@@ -128,7 +140,8 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
                                                 verticalAnchor='start'
                                                 pointerEvents='none'
                                             >
-                                                {node.data.name}
+                                                {node.data.name}{' '}
+                                                {node.data.layer}
                                             </Text>
                                         )}
                                     </Group>

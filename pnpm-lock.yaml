@@ -37,6 +37,9 @@ importers:
       '@types/d3-hierarchy':
         specifier: ^3.1.7
         version: 3.1.7
+      '@types/d3-scale-chromatic':
+        specifier: ^3.0.3
+        version: 3.0.3
       '@visx/group':
         specifier: latest
         version: 3.3.0(react@18.2.0)
@@ -1169,6 +1172,10 @@ packages:
     resolution: {integrity: sha512-dsoJGEIShosKVRBZB0Vo3C8nqSDqVGujJU6tPznsBJxNJNwMF8utmS83nvCBKQYPpjCzaaHcrf66iTRpZosLPw==}
     dev: false
 
+  /@types/d3-scale-chromatic@3.0.3:
+    resolution: {integrity: sha512-laXM4+1o5ImZv3RpFAsTRn3TEkzqkytiOY0Dz0sq5cnd1dtNlk6sHLon4OvqaiJb28T0S/TdsBI3Sjsy+keJrw==}
+    dev: false
+
   /@types/d3-scale@4.0.1:
     resolution: {integrity: sha512-GDuXcRcR6mKcpUVMhPNttpOzHi2dP6YcDqLZYSZHgwTZ+sfCa8e9q0VEBwZomblAPNMYpVqxojnSyIEb4s/Pwg==}
     dependencies:
@@ -1245,7 +1252,7 @@ packages:
       '@types/d3-quadtree': 3.0.6
       '@types/d3-random': 2.2.3
       '@types/d3-scale': 4.0.2
-      '@types/d3-scale-chromatic': 3.0.0
+      '@types/d3-scale-chromatic': 3.0.3
       '@types/d3-selection': 3.0.10
       '@types/d3-shape': 3.1.6
       '@types/d3-time': 3.0.3

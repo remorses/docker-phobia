@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+
 	"net/url"
 	"sort"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/wagoodman/dive/dive"
 	"github.com/wagoodman/dive/dive/filetree"
+	"github.com/wagoodman/dive/dive/image"
 )
 
 func main() {
@@ -63,6 +65,8 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+var imgCache = make(map[string]*image.Image)
+
 func analyzeImage(userImage string) (*JsonOutput, error) {
 	// Get the "image" parameter from the URL path
 	sourceStr := "docker"
@@ -80,54 +84,67 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 
 		return nil, errors.Wrap(err, "unable to determine image provider")
 	}
-	img, err := imageResolver.Fetch(imageStr)
-	if err != nil {
-		return nil, fmt.Errorf("unable to fetch image: %v", err)
+	var img *image.Image = imgCache[userImage]
+	if img == nil {
+		img, err = imageResolver.Fetch(imageStr)
+		if err != nil {
+			return nil, errors.Wrap(err, "unable to resolve image")
+		}
+		imgCache[userImage] = img
 	}
 
 	result, err := img.Analyze()
 	if err != nil {
 		return nil, fmt.Errorf("unable to analyze: %v", err)
 	}
+	// cache := filetree.NewComparer(result.RefTrees)
+	// errors := cache.BuildCache()
+	// if len(errors) > 0 {
+	// 	return nil, fmt.Errorf("unable to build cache: %d errors", len(errors))
+	// }
 
-	treeStack, failedPaths, err := filetree.StackTreeRange(result.RefTrees, 0, len(result.RefTrees)-1)
-	if len(failedPaths) > 0 {
-		return nil, fmt.Errorf("expected no filepath errors, got %d", len(failedPaths))
+	newTree, pathErrors, err := filetree.StackTreeRange(result.RefTrees, 0, len(result.RefTrees)-1)
+
+	pathsToLayersIndex := make(map[string]int)
+
+	for idx := 1; idx < len(result.RefTrees)-1; idx++ {
+		// mergedTree.VisitDepthChildFirst(func(node *filetree.FileNode) error {
+		// 	node.Data.DiffType = filetree.Unmodified
+		// 	return nil
+		// }, nil)
+		mergedTree, pathErrors, err := filetree.StackTreeRange(result.RefTrees, 0, idx-1)
+		markPathErrors, err := mergedTree.CompareAndMark(result.RefTrees[idx])
+		pathErrors = append(pathErrors, markPathErrors...)
+		if err != nil {
+			logrus.Errorf("error while building tree: %+v", err)
+			return nil, err
+		}
+		mergedTree.VisitDepthChildFirst(func(node *filetree.FileNode) error {
+			if node.Data.DiffType == filetree.Added {
+				pathsToLayersIndex[node.Path()] = idx
+			}
+			return nil
+		}, nil)
 	}
-	if err != nil {
-		return nil, fmt.Errorf("unable to stack trees: %v", err)
+	if len(pathErrors) > 0 {
+		return nil, fmt.Errorf("expected no filepath errors, got %d", len(pathErrors))
 	}
-	node := RemoveCycles(treeStack.Root)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("unable to stack trees: %v", err)
+	// }
+	node := RemoveCycles(newTree.Root)
 
-	// create a map from file path to layer index
-	filePathToLayerIndex := make(map[string]int)
-
+	allNodes := bfs(node)
+	for _, node := range allNodes {
+		if idx, ok := pathsToLayersIndex[node.Path]; ok {
+			node.Layer = idx
+		}
+	}
 	// sort layers by command
 	sort.Slice(result.Layers, func(i, j int) bool {
 		return result.Layers[i].Index < result.Layers[j].Index
 	})
 
-	for i, layer := range result.Layers {
-		layer.Tree.VisitDepthChildFirst(func(node *filetree.FileNode) error {
-
-			if node.Data.DiffType == filetree.Added {
-				filePathToLayerIndex[node.Path()] = i
-			}
-			return nil
-		},
-			func(fn *filetree.FileNode) bool {
-				return true
-			})
-
-	}
-
-	allNodes := bfs(node)
-	for _, node := range allNodes {
-		// mark each node with the layer it belongs to
-		if node.Path != "" {
-			node.Layer = filePathToLayerIndex[node.Path]
-		}
-	}
 	layers := make([]Layer, len(result.Layers))
 	for i, layer := range result.Layers {
 		layers[i] = Layer{
