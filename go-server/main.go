@@ -112,7 +112,7 @@ type JsonOutput struct {
 // Node represents a node in the new tree without cycles.
 // rename all fields to lowercase in json output
 type Node struct {
-	Size int32  `json:"value",omitempty`
+	Size int32  `json:"value,omitempty"`
 	Name string `json:"name"`
 	// omit this in json
 	Data     filetree.NodeData `json:"-"`

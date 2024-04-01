@@ -1,13 +1,9 @@
 'use client'
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/treemap
-import { ResponsiveTreeMap } from '@nivo/treemap'
-import useSWR from 'swr'
-import { testData } from 'website/src/app/test-data'
-import 'react-d3-treemap/dist/react.d3.treemap.css'
+import { useEffect, useState } from 'react'
 import TreeMap from 'react-d3-treemap'
-import { useState, useEffect } from 'react'
-import { Treemap } from 'website/src/app/treemap'
+import 'react-d3-treemap/dist/react.d3.treemap.css'
 
 function useWindowSize() {
     const [size, setSize] = useState({
@@ -45,7 +41,7 @@ export function Chart({ data }) {
                 // valuePropInData='value'
                 valueFn={(x) => formatFileSize(x)}
                 namePropInData='path'
-                linkPropInData='path'
+                valuePropInData='value'
                 childrenPropInData='children'
                 colorModel={0}
                 // disableBreadcrumb
