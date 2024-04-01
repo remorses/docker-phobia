@@ -88,9 +88,12 @@ func fileTreeToJson(tree *filetree.FileTree) (string, error) {
 	enc := json.NewEncoder(&buf)
 	enc.SetIndent("", "  ") // Use two spaces for indentation
 	enc.SetEscapeHTML(false)
-	newNodes := RemoveCycles(tree.Root)
+	node := RemoveCycles(tree.Root)
+
+	// node.ComputeSize()
+
 	output := JsonOutput{
-		Tree: newNodes[0],
+		Tree: node,
 	}
 	if output.Tree.Name == "" {
 		output.Tree.Name = "root"
@@ -109,17 +112,28 @@ type JsonOutput struct {
 // Node represents a node in the new tree without cycles.
 // rename all fields to lowercase in json output
 type Node struct {
-	Size     int64             `json:"size,omitempty"`
-	Name     string            `json:"name,omitempty"`
-	Data     filetree.NodeData `json:"data,omitempty"`
+	Size int32  `json:"value",omitempty`
+	Name string `json:"name"`
+	// omit this in json
+	Data     filetree.NodeData `json:"-"`
 	Path     string            `json:"path,omitempty"`
 	Children []*Node           `json:"children,omitempty"`
 }
 
-// RemoveCycles creates a new tree without cycles by removing the nodes that cause the cycle.
-func RemoveCycles(root *filetree.FileNode) []*Node {
+// func (node *Node) ComputeSize() {
+// 	for _, child := range node.Children {
+// 		child.ComputeSize()
+// 		node.Size += child.Size
+// 	}
+
+// 	if len(node.Children) == 0 {
+// 		node.Size += int32(node.Data.FileInfo.Size)
+// 	}
+// }
+
+func RemoveCycles(root *filetree.FileNode) *Node {
 	visited := make(map[*filetree.FileNode]bool)
-	return removeCyclesRecursive(root, visited, nil)
+	return removeCyclesRecursive(root, visited, nil)[0]
 }
 
 func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNode]bool, parent *filetree.FileNode) []*Node {
@@ -131,12 +145,20 @@ func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNo
 	visited[node] = true
 	defer delete(visited, node)
 
-	node.GetSize()
-	newNode := &Node{
-		Size: node.Size,
-		Name: node.Name,
+	if node.Data.DiffType == filetree.Removed {
+		return nil
+	}
 
-		// Data: node.Data,
+	size := int32(node.Data.FileInfo.Size)
+
+	if node.Data.FileInfo.IsDir {
+		size = 0
+	}
+
+	newNode := &Node{
+		Size: size,
+		Name: node.Name,
+		Data: node.Data,
 		Path: node.Path(),
 	}
 

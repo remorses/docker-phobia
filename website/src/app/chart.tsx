@@ -4,35 +4,65 @@
 import { ResponsiveTreeMap } from '@nivo/treemap'
 import useSWR from 'swr'
 import { testData } from 'website/src/app/test-data'
+import 'react-d3-treemap/dist/react.d3.treemap.css'
+import TreeMap from 'react-d3-treemap'
+import { useState, useEffect } from 'react'
+import { Treemap } from 'website/src/app/treemap'
+
+function useWindowSize() {
+    const [size, setSize] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    })
+
+    useEffect(() => {
+        const handleResize = () => {
+            setSize({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            })
+        }
+        window.addEventListener('resize', handleResize)
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
+
+    return size
+}
 
 export function Chart({ data }) {
-    console.log('data',data)
+    console.log('data', data)
+    const { width, height } = useWindowSize()
     return (
         <div className='flex flex-col w-full h-screen grow'>
-            <ResponsiveTreeMap
+            <TreeMap
+                height={height}
+                width={width}
                 data={data}
-                identity='path'
-                value='size'
-                label={'name'}
-
-                animate={false}
-                // valueFormat='.02s'
-                margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-                labelSkipSize={12}
-                // labelTextColor={{
-                //     from: 'color',
-                //     modifiers: [['darker', 1.2]],
-                // }}
-                parentLabelPosition='left'
-                // parentLabelTextColor={{
-                //     from: 'color',
-                //     modifiers: [['darker', 2]],
-                // }}
-                // borderColor={{
-                //     from: 'color',
-                //     modifiers: [['darker', 0.1]],
-                // }}
+                // valueUnit={''}
+                levelsToDisplay={3}
+                // valuePropInData='value'
+                valueFn={(x) => formatFileSize(x)}
+                namePropInData='path'
+                linkPropInData='path'
+                childrenPropInData='children'
+                colorModel={0}
+                // disableBreadcrumb
             />
         </div>
     )
+}
+
+function formatFileSize(bytes) {
+    console.log('bytes', bytes)
+    if (bytes < 1024) {
+        return bytes + ' bytes'
+    } else if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(2) + ' KB'
+    } else if (bytes < 1024 * 1024 * 1024) {
+        return (bytes / 1024 / 1024).toFixed(2) + ' MB'
+    } else {
+        return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB'
+    }
 }
