@@ -9,6 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@babel/plugin-syntax-jsx": "^7.24.1",
         "@types/d3": "^7.4.3",
         "@types/d3-hierarchy": "^3.1.7",
         "@types/d3-scale-chromatic": "^3.0.3",
@@ -21,6 +22,7 @@
         "d3": "^7.9.0",
         "d3-hierarchy": "^3.1.2",
         "d3-scale-chromatic": "^3.1.0",
+        "elacca": "^0.5.3",
         "next": "14.2.3",
         "react": "^18.3.1",
         "react-d3-treemap": "^1.0.29",

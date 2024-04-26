@@ -1,51 +1,17 @@
 'use client'
-import {
-    schemeSet1,
-    schemeSet2,
-    schemeSet3,
-    schemeBlues,
-    schemeBuGn,
-} from 'd3-scale-chromatic'
 
 import { scaleOrdinal } from '@visx/scale'
 
-import * as d3 from 'd3'
 import { Group } from '@visx/group'
-import {
-    Treemap,
-    hierarchy,
-    stratify,
-    treemapSquarify,
-    treemapBinary,
-    treemapDice,
-    treemapResquarify,
-    treemapSlice,
-    treemapSliceDice,
-} from '@visx/hierarchy'
+import { hierarchy, treemapBinary } from '@visx/hierarchy'
 import { Text } from '@visx/text'
-import {
-    treemap as d3treemap,
-    HierarchyRectangularNode,
-    HierarchyNode,
-} from 'd3-hierarchy'
+import { HierarchyNode, treemap as d3treemap } from 'd3-hierarchy'
 
-import { TileMethod } from '@visx/hierarchy/lib/types'
-import shakespeare, { Shakespeare } from '@visx/mock-data/lib/mocks/shakespeare'
-import { scaleLinear } from '@visx/scale'
-import { useState } from 'react'
-import { useWindowSize } from 'website/src/app/hooks'
+import { useMemo, useState } from 'react'
 import { scheme } from 'website/src/app/colors'
+import { useWindowSize } from 'website/src/app/hooks'
 
-const color1 = '#f3e9d2'
-const color2 = '#4281a4'
 const background = '#114b5f'
-
-const gbInBytes = 1024 * 1024
-
-const data = stratify<Shakespeare>()
-    .id((d) => d.id)
-    .parentId((d) => d.parent)(shakespeare)
-    .sum((d) => d.size ?? 0)
 
 const defaultMargin = { top: 10, left: 10, right: 10, bottom: 10 }
 
@@ -59,21 +25,23 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
     const { height, width } = useWindowSize()
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
-    const root = hierarchy(data)
-        .sort((a, b) => (b.value || 0) - (a.value || 0))
-        .sum((d) => d.value || 0)
 
-    const treemap = d3treemap()
-        .tile(treemapBinary)
-        .size([xMax, yMax])
+    const [zoomedNode, setZoomedNode] = useState(() =>
+        hierarchy(data)
+            .sort((a, b) => (b.value || 0) - (a.value || 0))
+            .sum((d) => d.value || 0),
+    )
 
-        .padding(6)
-        .paddingTop(20)
+    const treemapElem = useMemo(() => {
+        const treemap = d3treemap<any>()
+            .tile(treemapBinary)
+            .size([xMax, yMax])
 
-    const [zoomedNode, setZoomedNode] =
-        useState<HierarchyRectangularNode<any> | null>(root)
+            .padding(6)
+            .paddingTop(20)
 
-    const treemapElem = treemap(zoomedNode as any)
+        return treemap(zoomedNode as any)
+    }, [zoomedNode])
 
     const step = Math.ceil(scheme.length / layers.length)
     const colorScale = scaleOrdinal({
@@ -83,7 +51,7 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
         range: scheme.filter((_, i) => i % step === 0),
     })
 
-    const totalSize = zoomedNode.value || 0
+    const totalSize = zoomedNode?.value || 0
     return width < 10 ? null : (
         <div>
             <div>
@@ -94,17 +62,20 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
                         rx={14}
                         fill={background}
                     />
-                    <Group>
+                    <g>
                         {treemapElem
 
                             .descendants()
 
                             // .reverse()
-                            // .filter((node) => node.value >= totalSize / 200)
+                            // .filter((node) => node.data.value >= totalSize / 200)
 
                             .map((node, i) => {
                                 const nodeWidth = node.x1 - node.x0
                                 const nodeHeight = node.y1 - node.y0
+                                // if (nodeWidth < 1 || nodeHeight < 1) {
+                                //     return null
+                                // }
                                 return (
                                     <Group
                                         key={`node-${i}`}
@@ -140,15 +111,13 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
                                                 textAnchor='start'
                                                 verticalAnchor='start'
                                                 pointerEvents='none'
-                                            >
-                                                {node.data.name}{' '}
-                                                {node.data.layer}
-                                            </Text>
+                                                children={`${node.data.name} ${node.data.layer}`}
+                                            />
                                         )}
                                     </Group>
                                 )
                             })}
-                    </Group>
+                    </g>
                 </svg>
             </div>
         </div>
