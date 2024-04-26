@@ -24,6 +24,16 @@ func main() {
 	router.Use(enableCORS)
 
 	router.HandleFunc("/analyze/{image:.*}", imageAnalyzerHandler).Methods("POST", "GET")
+	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(struct {
+			Version string `json:"version"`
+			Name    string `json:"name"`
+		}{
+			Version: "1.0.0",
+			Name:    "docker-phobia",
+		})
+	}).Methods("GET")
 
 	fmt.Println("Server listening on http://localhost:8080")
 	http.ListenAndServe(":8080", router)
