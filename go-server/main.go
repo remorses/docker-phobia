@@ -19,11 +19,14 @@ import (
 )
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/analyze/{image:.*}", imageAnalyzerHandler).Methods("POST", "GET")
+	router := mux.NewRouter()
+
+	router.Use(enableCORS)
+
+	router.HandleFunc("/analyze/{image:.*}", imageAnalyzerHandler).Methods("POST", "GET")
 
 	fmt.Println("Server listening on http://localhost:8080")
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":8080", router)
 }
 
 func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
@@ -246,4 +249,20 @@ func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNo
 	}
 
 	return []*Node{newNode}
+}
+
+func enableCORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+
+		// Preflight request
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
