@@ -2,9 +2,11 @@ package main
 
 import (
 	"bytes"
+	"log"
+	"sort"
+	"time"
 
 	"net/url"
-	"sort"
 
 	"encoding/json"
 	"fmt"
@@ -57,6 +59,7 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+	println("Analyzed image: ", userImage)
 	// Send a response with the json
 	w.Header().Set("Content-Type", "application/json")
 	var buf bytes.Buffer
@@ -80,9 +83,19 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 
 var imgCache = make(map[string]*image.Image)
 
+var currentlyAnalyzing = make(map[string]bool)
+
 func analyzeImage(userImage string) (*JsonOutput, error) {
 	// Get the "image" parameter from the URL path
 	sourceStr := "docker"
+	if currentlyAnalyzing[userImage] {
+		return nil, errors.New("image " + userImage + " is currently being analyzed")
+	}
+	currentlyAnalyzing[userImage] = true
+	defer func() {
+		delete(currentlyAnalyzing, userImage)
+	}()
+
 	sourceType, imageStr := dive.DeriveImageSource(userImage)
 	if sourceType == dive.SourceUnknown {
 
@@ -90,6 +103,7 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 		if sourceType == dive.SourceUnknown {
 			return nil, errors.Errorf("unable to determine image source: %v\n", sourceStr)
 		}
+		println("parsing image source", sourceStr, userImage)
 		imageStr = userImage
 	}
 	imageResolver, err := dive.GetImageResolver(sourceType)
@@ -98,14 +112,20 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 		return nil, errors.Wrap(err, "unable to determine image provider")
 	}
 	var img *image.Image = imgCache[userImage]
+
+	// log the time it takes to fetch in seconds
+	start := time.Now()
 	if img == nil {
+		println("fetching image with resolver", sourceType.String())
 		img, err = imageResolver.Fetch(imageStr)
 		if err != nil {
 			return nil, errors.Wrap(err, "unable to resolve image")
 		}
 		imgCache[userImage] = img
 	}
+	log.Println("fetched image in", time.Since(start).Seconds())
 
+	println("analyzing")
 	result, err := img.Analyze()
 	if err != nil {
 		return nil, fmt.Errorf("unable to analyze: %v", err)
@@ -116,6 +136,7 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 	// 	return nil, fmt.Errorf("unable to build cache: %d errors", len(errors))
 	// }
 
+	println("stacking trees")
 	newTree, pathErrors, err := filetree.StackTreeRange(result.RefTrees, 0, len(result.RefTrees)-1)
 
 	pathsToLayersIndex := make(map[string]int)
@@ -145,6 +166,7 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 	// if err != nil {
 	// 	return nil, fmt.Errorf("unable to stack trees: %v", err)
 	// }
+	println("removing cycles")
 	node := RemoveCycles(newTree.Root)
 
 	allNodes := bfs(node)
@@ -155,6 +177,9 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 	}
 	// sort layers by command
 	sort.Slice(result.Layers, func(i, j int) bool {
+		// if result.Layers[i].Index == result.Layers[j].Index {
+		// 	return result.Layers[i].Size < result.Layers[j].Size
+		// }
 		return result.Layers[i].Index < result.Layers[j].Index
 	})
 
@@ -256,6 +281,10 @@ func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNo
 	for _, child := range node.Children {
 		childNodes := removeCyclesRecursive(child, visited, node)
 		newNode.Children = append(newNode.Children, childNodes...)
+		// sort them by size
+		sort.Slice(newNode.Children, func(i, j int) bool {
+			return newNode.Children[i].Name < newNode.Children[j].Name
+		})
 	}
 
 	return []*Node{newNode}

@@ -1,8 +1,9 @@
 'skip ssr'
+
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/treemap
 import { useRouter } from 'next/router'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import useSWR from 'swr'
 import { Chart } from 'website/src/app/chart'
 import { TreemapDemo } from 'website/src/app/visx'
@@ -38,14 +39,18 @@ export default function Home({}) {
     console.log('image', router.query)
 
     let imageStr = image?.map((x) => decodeURIComponent(x)).join('/')
-    const { data } = useSWR(
-        [image],
-        async () => {
+    const [data, setData] = useState<any>()
+    useEffect(() => {
+        const get = async () => {
+            if (!imageStr) {
+                return
+            }
             const { tree, layers } = await analyzeImage(imageStr)
-            return { tree, layers }
-        },
-        { },
-    )
+            return setData({ tree, layers })
+        }
+        get()
+    }, [imageStr])
+
     if (!data || !image) {
         return <div>Loading...</div>
     }
@@ -54,7 +59,7 @@ export default function Home({}) {
     return (
         <Suspense>
             <div className='flex flex-col w-full'>
-                <div className="h-[300px] w-full"></div>
+                <div className='h-[300px] w-full'></div>
                 <TreemapDemo layers={layers} data={tree} />
             </div>
         </Suspense>
