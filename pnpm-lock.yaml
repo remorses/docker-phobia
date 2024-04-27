@@ -43,6 +43,9 @@ importers:
       '@types/d3-scale-chromatic':
         specifier: ^3.0.3
         version: 3.0.3
+      '@visx/clip-path':
+        specifier: ^3.3.0
+        version: 3.3.0(react@18.3.1)
       '@visx/group':
         specifier: latest
         version: 3.3.0(react@18.3.1)
@@ -952,6 +955,11 @@ packages:
 
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
+
+  '@visx/clip-path@3.3.0':
+    resolution: {integrity: sha512-uMuI2M05qZTgUdTSHJGg4VDr2gytGmGyuaC89iByHqNaeMHkrJqQi/cOFAZi4D0dn75p7lVirJijEgDgSpcrMQ==}
+    peerDependencies:
+      react: ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
 
   '@visx/group@3.3.0':
     resolution: {integrity: sha512-yKepDKwJqlzvnvPS0yDuW13XNrYJE4xzT6xM7J++441nu6IybWWwextyap8ey+kU651cYDb+q1Oi6aHvQwyEyw==}
@@ -3982,6 +3990,12 @@ snapshots:
       csstype: 3.1.3
 
   '@types/semver@7.5.8': {}
+
+  '@visx/clip-path@3.3.0(react@18.3.1)':
+    dependencies:
+      '@types/react': 18.3.0
+      prop-types: 15.8.1
+      react: 18.3.1
 
   '@visx/group@3.3.0(react@18.3.1)':
     dependencies:

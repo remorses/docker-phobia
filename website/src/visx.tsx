@@ -1,4 +1,5 @@
 'use client'
+import { RectClipPath } from '@visx/clip-path'
 
 import { scaleOrdinal } from '@visx/scale'
 
@@ -28,7 +29,6 @@ export function TreemapDemo({
     layers,
     margin = defaultMargin,
 }) {
-    
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
 
@@ -44,7 +44,7 @@ export function TreemapDemo({
             .size([xMax, yMax])
 
             .padding(6)
-            .paddingTop(20)
+            .paddingTop(26)
 
         return treemap(zoomedNode as any)
     }, [zoomedNode])
@@ -66,58 +66,69 @@ export function TreemapDemo({
         <svg className='grow' width={width} height={height}>
             <rect width={width} height={height} rx={14} fill={background} />
             <g>
-                {treemapElem
+                {treemapElem.descendants().map((node, i) => {
+                    const nodeWidth = node.x1 - node.x0
+                    const nodeHeight = node.y1 - node.y0
+                    const min = 2
+                    if (nodeWidth < min || nodeHeight < min) {
+                        return null
+                    }
+                    // if (nodeWidth < 1 || nodeHeight < 1) {
+                    //     return null
+                    // }
+                    const text = `${node.data.name} ${node.data.layer || ''}`
+                    const showText = nodeWidth > 40 && nodeHeight > 14
+                    
 
-                    .descendants()
-
-                    // .reverse()
-                    // .filter((node) => node.data.value >= totalSize / 200)
-
-                    .map((node, i) => {
-                        const nodeWidth = node.x1 - node.x0
-                        const nodeHeight = node.y1 - node.y0
-                        // if (nodeWidth < 1 || nodeHeight < 1) {
-                        //     return null
-                        // }
-                        return (
-                            <Group
-                                key={`node-${i}`}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    setZoomedNode(node.copy())
-                                }}
-                                top={node.y0 + margin.top}
-                                left={node.x0 + margin.left}
-                            >
-                                <rect
+                    return (
+                        <Group
+                            key={`node-${i}`}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                setZoomedNode(node.copy())
+                            }}
+                            top={node.y0 + margin.top}
+                            left={node.x0 + margin.left}
+                        >
+                            {showText && (
+                                <RectClipPath
+                                    id={`clip-${i}`}
+                                    width={nodeWidth-4}
+                                    height={nodeHeight-2}
+                                    // strokeWidth={2}
+                                />
+                            )}
+                            <rect
+                                width={nodeWidth}
+                                height={nodeHeight}
+                                stroke={'#000'}
+                                // opacity={d3
+                                //     .scaleLinear()
+                                //     .domain([0, 2, 6])
+                                //     .range([1, 1, 0])(node.depth)}
+                                strokeWidth={2}
+                                fill={colorScale(node.data.layer || 0)}
+                            />
+                            {showText && (
+                                <Text
+                                    fill='#000'
+                                    fontSize={13}
+                                    fontWeight={600}
+                                    clipPath={`url(#clip-${i})`}
+                                    dy={9}
+                                    dx={6}
+                                    // limit text visibility inside the rect
                                     width={nodeWidth}
                                     height={nodeHeight}
-                                    stroke={'#000'}
-                                    // opacity={d3
-                                    //     .scaleLinear()
-                                    //     .domain([0, 2, 6])
-                                    //     .range([1, 1, 0])(node.depth)}
-                                    strokeWidth={2}
-                                    fill={colorScale(node.data.layer || 0)}
+                                    textAnchor='start'
+                                    verticalAnchor='start'
+                                    pointerEvents='none'
+                                    children={text}
                                 />
-                                {nodeWidth > 50 && nodeHeight > 9 && (
-                                    <Text
-                                        fill='#000'
-                                        fontSize={9}
-                                        dy={9}
-                                        dx={4}
-                                        // limit text visibility inside the rect
-                                        width={nodeWidth}
-                                        height={nodeHeight}
-                                        textAnchor='start'
-                                        verticalAnchor='start'
-                                        pointerEvents='none'
-                                        children={`${node.data.name} ${node.data.layer}`}
-                                    />
-                                )}
-                            </Group>
-                        )
-                    })}
+                            )}
+                        </Group>
+                    )
+                })}
             </g>
         </svg>
     )
