@@ -7,9 +7,9 @@ import { hierarchy, treemapBinary } from '@visx/hierarchy'
 import { Text } from '@visx/text'
 import { HierarchyNode, treemap as d3treemap } from 'd3-hierarchy'
 
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { scheme } from 'website/src/colors'
-import { useWindowSize } from 'website/src/hooks'
+import { useElemSize, useWindowSize } from 'website/src/hooks'
 
 const background = '#114b5f'
 
@@ -21,8 +21,14 @@ export type TreemapProps = {
     margin?: { top: number; right: number; bottom: number; left: number }
 }
 
-export function TreemapDemo({ data, layers, margin = defaultMargin }) {
-    const { height, width } = useWindowSize()
+export function TreemapDemo({
+    data,
+    width,
+    height,
+    layers,
+    margin = defaultMargin,
+}) {
+    
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
 
@@ -52,74 +58,67 @@ export function TreemapDemo({ data, layers, margin = defaultMargin }) {
     })
 
     const totalSize = zoomedNode?.value || 0
+
+    if (!width || !height) {
+        return null
+    }
     return width < 10 ? null : (
-        <div>
-            <div>
-                <svg width={width} height={height}>
-                    <rect
-                        width={width}
-                        height={height}
-                        rx={14}
-                        fill={background}
-                    />
-                    <g>
-                        {treemapElem
+        <svg className='grow' width={width} height={height}>
+            <rect width={width} height={height} rx={14} fill={background} />
+            <g>
+                {treemapElem
 
-                            .descendants()
+                    .descendants()
 
-                            // .reverse()
-                            // .filter((node) => node.data.value >= totalSize / 200)
+                    // .reverse()
+                    // .filter((node) => node.data.value >= totalSize / 200)
 
-                            .map((node, i) => {
-                                const nodeWidth = node.x1 - node.x0
-                                const nodeHeight = node.y1 - node.y0
-                                // if (nodeWidth < 1 || nodeHeight < 1) {
-                                //     return null
-                                // }
-                                return (
-                                    <Group
-                                        key={`node-${i}`}
-                                        onClick={(e) => {
-                                            e.stopPropagation()
-                                            setZoomedNode(node.copy())
-                                        }}
-                                        top={node.y0 + margin.top}
-                                        left={node.x0 + margin.left}
-                                    >
-                                        <rect
-                                            width={nodeWidth}
-                                            height={nodeHeight}
-                                            stroke={'#000'}
-                                            // opacity={d3
-                                            //     .scaleLinear()
-                                            //     .domain([0, 2, 6])
-                                            //     .range([1, 1, 0])(node.depth)}
-                                            strokeWidth={2}
-                                            fill={colorScale(
-                                                node.data.layer || 0,
-                                            )}
-                                        />
-                                        {nodeWidth > 50 && nodeHeight > 9 && (
-                                            <Text
-                                                fill='#000'
-                                                fontSize={9}
-                                                dy={9}
-                                                dx={4}
-                                                // limit text visibility inside the rect
-                                                width={nodeWidth}
-                                                height={nodeHeight}
-                                                textAnchor='start'
-                                                verticalAnchor='start'
-                                                pointerEvents='none'
-                                                children={`${node.data.name} ${node.data.layer}`}
-                                            />
-                                        )}
-                                    </Group>
-                                )
-                            })}
-                    </g>
-                </svg>
-            </div>
-        </div>
+                    .map((node, i) => {
+                        const nodeWidth = node.x1 - node.x0
+                        const nodeHeight = node.y1 - node.y0
+                        // if (nodeWidth < 1 || nodeHeight < 1) {
+                        //     return null
+                        // }
+                        return (
+                            <Group
+                                key={`node-${i}`}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    setZoomedNode(node.copy())
+                                }}
+                                top={node.y0 + margin.top}
+                                left={node.x0 + margin.left}
+                            >
+                                <rect
+                                    width={nodeWidth}
+                                    height={nodeHeight}
+                                    stroke={'#000'}
+                                    // opacity={d3
+                                    //     .scaleLinear()
+                                    //     .domain([0, 2, 6])
+                                    //     .range([1, 1, 0])(node.depth)}
+                                    strokeWidth={2}
+                                    fill={colorScale(node.data.layer || 0)}
+                                />
+                                {nodeWidth > 50 && nodeHeight > 9 && (
+                                    <Text
+                                        fill='#000'
+                                        fontSize={9}
+                                        dy={9}
+                                        dx={4}
+                                        // limit text visibility inside the rect
+                                        width={nodeWidth}
+                                        height={nodeHeight}
+                                        textAnchor='start'
+                                        verticalAnchor='start'
+                                        pointerEvents='none'
+                                        children={`${node.data.name} ${node.data.layer}`}
+                                    />
+                                )}
+                            </Group>
+                        )
+                    })}
+            </g>
+        </svg>
     )
 }

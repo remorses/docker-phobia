@@ -3,9 +3,10 @@
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/treemap
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { Chart } from 'website/src/chart'
+import { useElemSize } from 'website/src/hooks'
 import { TreemapDemo } from 'website/src/visx'
 
 const baseUrl = new URL('http://localhost:8080')
@@ -58,10 +59,32 @@ export default function Home({}) {
 
     return (
         <Suspense>
-            <div className='flex flex-col w-full'>
+            <div className='flex h-full flex-col w-full'>
                 <div className='h-[300px] w-full'></div>
-                <TreemapDemo layers={layers} data={tree} />
+                <PassComponentSize className='grow'>
+                    {({ width, height }) => (
+                        <TreemapDemo
+                            width={width}
+                            height={height}
+                            layers={layers}
+                            data={tree}
+                        />
+                    )}
+                </PassComponentSize>
             </div>
         </Suspense>
+    )
+}
+
+function PassComponentSize({ children, ...rest }) {
+    const ref = useRef<HTMLDivElement>(null)
+    const { width, height } = useElemSize(ref)
+    if (!width || !height) {
+        return <div key='parent' ref={ref} {...rest} />
+    }
+    return (
+        <div key='parent' ref={ref} {...rest}>
+            {children({ width, height })}
+        </div>
     )
 }
