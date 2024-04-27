@@ -1,4 +1,6 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect, useLayoutEffect, use, createContext, useContext } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
+
 
 export function useWindowSize() {
     const [size, setSize] = useState({
@@ -41,6 +43,37 @@ export function useElemSize(ref) {
             window.removeEventListener('resize', handleResize)
         }
     }, [])
-    
+
     return size
+}
+
+const ViewTransitionsContext = createContext<
+    Dispatch<SetStateAction<(() => void) | null>>
+>(() => () => {})
+
+export function ViewTransitions({
+    children,
+}: Readonly<{
+    children: React.ReactNode
+}>) {
+    const [finishViewTransition, setFinishViewTransition] = useState<
+        null | (() => void)
+    >(null)
+
+    useEffect(() => {
+        if (finishViewTransition) {
+            finishViewTransition()
+            setFinishViewTransition(null)
+        }
+    }, [finishViewTransition])
+
+    return (
+        <ViewTransitionsContext.Provider value={setFinishViewTransition}>
+            {children}
+        </ViewTransitionsContext.Provider>
+    )
+}
+
+export function useSetFinishViewTransition() {
+    return useContext(ViewTransitionsContext)
 }

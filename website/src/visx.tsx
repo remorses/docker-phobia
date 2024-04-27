@@ -1,4 +1,6 @@
 'use client'
+import { startTransition, useCallback } from 'react'
+
 import { RectClipPath } from '@visx/clip-path'
 
 import { scaleOrdinal } from '@visx/scale'
@@ -10,7 +12,11 @@ import { HierarchyNode, treemap as d3treemap } from 'd3-hierarchy'
 
 import { useMemo, useRef, useState } from 'react'
 import { scheme } from 'website/src/colors'
-import { useElemSize, useWindowSize } from 'website/src/hooks'
+import {
+    useElemSize,
+    useSetFinishViewTransition,
+    useWindowSize,
+} from 'website/src/hooks'
 
 const background = '#114b5f'
 
@@ -32,11 +38,20 @@ export function TreemapDemo({
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
 
-    const [zoomedNode, setZoomedNode] = useState(() =>
-        hierarchy(data)
+    const [zoomedNode, setZoomedNode] = useState(() => {
+        let i = 0
+        let nodes = hierarchy(data)
             .sort((a, b) => (b.value || 0) - (a.value || 0))
-            .sum((d) => d.value || 0),
-    )
+            .sum((d) => d.value || 0)
+            .each((x) => {
+                i++
+                x.data.id = i
+                // return x
+            })
+        console.log('nodes', nodes)
+
+        return nodes
+    })
 
     const treemapElem = useMemo(() => {
         const treemap = d3treemap<any>()
@@ -59,18 +74,29 @@ export function TreemapDemo({
 
     const totalSize = zoomedNode?.value || 0
 
+    const finishViewTransition = useSetFinishViewTransition()
     if (!width || !height) {
         return null
     }
     return width < 10 ? null : (
-        <svg className='grow' width={width} height={height}>
+        <svg
+            // style={{ viewTransitionName: `parent-svg` }}
+            className='grow'
+            width={width}
+            height={height}
+        >
             <rect width={width} height={height} rx={14} fill={background} />
             <g>
                 {treemapElem.descendants().map((node, i) => {
                     const nodeWidth = node.x1 - node.x0
                     const nodeHeight = node.y1 - node.y0
                     const min = 2
-                    if (nodeWidth < min || nodeHeight < min) {
+                    if (
+                        !nodeWidth ||
+                        !nodeHeight ||
+                        nodeWidth < min ||
+                        nodeHeight < min
+                    ) {
                         return null
                     }
                     // if (nodeWidth < 1 || nodeHeight < 1) {
@@ -78,14 +104,36 @@ export function TreemapDemo({
                     // }
                     const text = `${node.data.name} ${node.data.layer || ''}`
                     const showText = nodeWidth > 40 && nodeHeight > 14
-                    
 
                     return (
                         <Group
-                            key={`node-${i}`}
+                            key={`node-${node.data.id}`}
+                            style={{
+                                viewTransitionName:
+                                    node === zoomedNode ? 'full' : undefined,
+                            }}
                             onClick={(e) => {
                                 e.stopPropagation()
-                                setZoomedNode(node.copy())
+                                if (!('startViewTransition' in document)) {
+                                    throw new Error(
+                                        'startViewTransition is not supported',
+                                    )
+                                }
+                                e.currentTarget.style.viewTransitionName =
+                                    'full'
+                                e.currentTarget.style.zIndex = '100'
+                                // @ts-ignore
+                                document.startViewTransition(
+                                    () =>
+                                        new Promise<void>((resolve) => {
+                                            // copied from https://github.com/vercel/next.js/blob/66f8ffaa7a834f6591a12517618dce1fd69784f6/packages/next/src/client/link.tsx#L231-L233
+                                            setZoomedNode(node.copy())
+                                            finishViewTransition(() => () => {
+                                                resolve()
+                                                // e.currentTarget.style.viewTransitionName =
+                                            })
+                                        }),
+                                )
                             }}
                             top={node.y0 + margin.top}
                             left={node.x0 + margin.left}
@@ -93,8 +141,8 @@ export function TreemapDemo({
                             {showText && (
                                 <RectClipPath
                                     id={`clip-${i}`}
-                                    width={nodeWidth-4}
-                                    height={nodeHeight-2}
+                                    width={nodeWidth - 4}
+                                    height={nodeHeight - 2}
                                     // strokeWidth={2}
                                 />
                             )}
