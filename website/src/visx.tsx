@@ -8,8 +8,8 @@ import { Text } from '@visx/text'
 import { HierarchyNode, treemap as d3treemap } from 'd3-hierarchy'
 
 import { useMemo, useState } from 'react'
-import { scheme } from 'website/src/app/colors'
-import { useWindowSize } from 'website/src/app/hooks'
+import { scheme } from 'website/src/colors'
+import { useWindowSize } from 'website/src/hooks'
 
 const background = '#114b5f'
 

@@ -5,8 +5,8 @@
 import { useRouter } from 'next/router'
 import { Suspense, useEffect, useState } from 'react'
 import useSWR from 'swr'
-import { Chart } from 'website/src/app/chart'
-import { TreemapDemo } from 'website/src/app/visx'
+import { Chart } from 'website/src/chart'
+import { TreemapDemo } from 'website/src/visx'
 
 const baseUrl = new URL('http://localhost:8080')
 async function analyzeImage(image) {
