@@ -39,7 +39,10 @@ export type TreemapProps = {
     margin?: { top: number; right: number; bottom: number; left: number }
 }
 
-function contains(id, b: HierarchyNode<any>) {
+function contains(id, b: HierarchyNode<any>, level = 2) {
+    if (!level) {
+        return false
+    }
     if (id === b.data.id) {
         return true
     }
@@ -47,7 +50,7 @@ function contains(id, b: HierarchyNode<any>) {
     if (!b.parent) {
         return false
     }
-    return contains(id, b.parent)
+    return contains(id, b.parent, level - 1)
 }
 
 const context = createContext<{
@@ -92,12 +95,16 @@ export function TreemapDemo({ data, width, height, layers }) {
 
     const [justClickedNodeId, setJustClickedNodeId] = useState<number>(-1)
 
-    const colorScale = scaleOrdinal({
-        domain: layers.map((l, i) => i),
-        // skip some steps so scheme len is same as layers len
+    const colorScale = useMemo(
+        () =>
+            scaleOrdinal({
+                domain: layers.map((l, i) => i),
+                // skip some steps so scheme len is same as layers len
 
-        range: scheme.filter((_, i) => i % step === 0),
-    })
+                range: scheme.filter((_, i) => i % step === 0),
+            }),
+        [],
+    )
 
     if (!width || !height) {
         return null
