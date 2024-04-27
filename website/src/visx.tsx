@@ -90,7 +90,7 @@ export function TreemapDemo({ data, width, height, layers }) {
 
     const step = Math.ceil(scheme.length / layers.length)
 
-    const [justClickedNodeId, setJustClickedNodeId] = useState<number>()
+    const [justClickedNodeId, setJustClickedNodeId] = useState<number>(0)
 
     const colorScale = scaleOrdinal({
         domain: layers.map((l, i) => i),
@@ -105,6 +105,7 @@ export function TreemapDemo({ data, width, height, layers }) {
     return width < 10 ? null : (
         <context.Provider
             value={{
+                // @ts-ignore
                 zoomedNode,
                 setZoomedNode,
                 colorScale,
