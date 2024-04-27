@@ -17,6 +17,7 @@ import {
     useSetFinishViewTransition,
     useWindowSize,
 } from 'website/src/hooks'
+import { flushSync } from 'react-dom'
 
 const background = '#114b5f'
 
@@ -74,110 +75,120 @@ export function TreemapDemo({
 
     const totalSize = zoomedNode?.value || 0
 
+    let currentZoomedRef = useRef()
     const finishViewTransition = useSetFinishViewTransition()
+    const justClickedNodeId = useRef<number>()
     if (!width || !height) {
         return null
     }
     return width < 10 ? null : (
-        <svg
-            // style={{ viewTransitionName: `parent-svg` }}
+        <div
             className='grow'
-            width={width}
-            height={height}
+            style={{
+                width,
+                height,
+                position: 'relative',
+            }}
         >
-            <rect width={width} height={height} rx={14} fill={background} />
-            <g>
-                {treemapElem.descendants().map((node, i) => {
-                    const nodeWidth = node.x1 - node.x0
-                    const nodeHeight = node.y1 - node.y0
-                    const min = 2
-                    if (
-                        !nodeWidth ||
-                        !nodeHeight ||
-                        nodeWidth < min ||
-                        nodeHeight < min
-                    ) {
-                        return null
-                    }
-                    // if (nodeWidth < 1 || nodeHeight < 1) {
-                    //     return null
-                    // }
-                    const text = `${node.data.name} ${node.data.layer || ''}`
-                    const showText = nodeWidth > 40 && nodeHeight > 14
+            {/* <rect width={width} height={height} rx={14} fill={background} /> */}
 
-                    return (
-                        <Group
-                            key={`node-${node.data.id}`}
-                            style={{
-                                viewTransitionName:
-                                    node === zoomedNode ? 'full' : undefined,
-                            }}
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                if (!('startViewTransition' in document)) {
-                                    throw new Error(
-                                        'startViewTransition is not supported',
-                                    )
-                                }
-                                e.currentTarget.style.viewTransitionName =
-                                    'full'
-                                e.currentTarget.style.zIndex = '100'
-                                // @ts-ignore
-                                document.startViewTransition(
-                                    () =>
-                                        new Promise<void>((resolve) => {
-                                            // copied from https://github.com/vercel/next.js/blob/66f8ffaa7a834f6591a12517618dce1fd69784f6/packages/next/src/client/link.tsx#L231-L233
-                                            setZoomedNode(node.copy())
-                                            finishViewTransition(() => () => {
-                                                resolve()
-                                                // e.currentTarget.style.viewTransitionName =
-                                            })
-                                        }),
+            {treemapElem.descendants().map((node, i) => {
+                const nodeWidth = node.x1 - node.x0
+                const nodeHeight = node.y1 - node.y0
+                const min = 2
+                if (
+                    !nodeWidth ||
+                    !nodeHeight ||
+                    nodeWidth < min ||
+                    nodeHeight < min
+                ) {
+                    return null
+                }
+                // if (nodeWidth < 1 || nodeHeight <div 1) {
+                //     return null
+                // }
+                const text = `${node.data.name} ${node.data.layer || ''}`
+                const showText = nodeWidth > 40 && nodeHeight > 14
+
+                return (
+                    <div
+                        key={`node-${node.data.id}`}
+                        ref={
+                            node.data.id === zoomedNode?.data.id
+                                ? currentZoomedRef
+                                : undefined
+                        }
+                        style={{
+                            position: 'absolute',
+                            top: node.y0 + margin.top,
+                            left: node.x0 + margin.left,
+                            viewTransitionName:
+                                node.data.id === zoomedNode?.data.id ||
+                                justClickedNodeId.current === node.data.id
+                                    ? 'full'
+                                    : undefined,
+                        }}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            if (!('startViewTransition' in document)) {
+                                throw new Error(
+                                    'startViewTransition is not supported',
                                 )
-                            }}
-                            top={node.y0 + margin.top}
-                            left={node.x0 + margin.left}
-                        >
-                            {showText && (
-                                <RectClipPath
-                                    id={`clip-${i}`}
-                                    width={nodeWidth - 4}
-                                    height={nodeHeight - 2}
-                                    // strokeWidth={2}
-                                />
-                            )}
-                            <rect
-                                width={nodeWidth}
-                                height={nodeHeight}
-                                stroke={'#000'}
-                                // opacity={d3
-                                //     .scaleLinear()
-                                //     .domain([0, 2, 6])
-                                //     .range([1, 1, 0])(node.depth)}
-                                strokeWidth={2}
-                                fill={colorScale(node.data.layer || 0)}
+                            }
+
+                            currentZoomedRef?.current?.style.viewTransitionName =
+                                ''
+                            e.currentTarget.style.viewTransitionName = 'full'
+                            justClickedNodeId.current = node.data.id
+                            // @ts-ignore
+                            document.startViewTransition(
+                                () =>
+                                    new Promise<void>((resolve) => {
+                                        // copied from https://github.com/vercel/next.js/blob/66f8ffaa7a834f6591a12517618dce1fd69784f6/packages/next/src/client/link.tsx#L231-L233
+
+                                        setZoomedNode(node.copy())
+
+                                        finishViewTransition(() => () => {
+                                            resolve()
+                                            // e.currentTarget.style.viewTransitionName =
+                                        })
+                                    }),
+                            )
+                        }}
+                    >
+                        {showText && (
+                            <RectClipPath
+                                id={`clip-${i}`}
+                                width={nodeWidth - 4}
+                                height={nodeHeight - 2}
+                                // strokeWidth={2}
                             />
-                            {showText && (
-                                <Text
-                                    fill='#000'
-                                    fontSize={13}
-                                    fontWeight={600}
-                                    clipPath={`url(#clip-${i})`}
-                                    dy={9}
-                                    dx={6}
-                                    // limit text visibility inside the rect
-                                    width={nodeWidth}
-                                    height={nodeHeight}
-                                    textAnchor='start'
-                                    verticalAnchor='start'
-                                    pointerEvents='none'
-                                    children={text}
-                                />
-                            )}
-                        </Group>
-                    )
-                })}
-            </g>
-        </svg>
+                        )}
+                        <div
+                            style={{
+                                width: nodeWidth,
+                                height: nodeHeight,
+                                stroke: '#000',
+                                backgroundColor: colorScale(
+                                    node.data.layer || 0,
+                                ),
+                                // borderRadius: 4,
+                                borderColor: '#000',
+                                borderWidth: 2,
+                            }}
+                        />
+                        {showText && (
+                            <div
+                                className='text-black text-sm absolute top-0 left-0'
+                                style={{
+                                    clipPath: `url(#clip-${i})`,
+                                }}
+                                children={text}
+                            />
+                        )}
+                    </div>
+                )
+            })}
+        </div>
     )
 }
