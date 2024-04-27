@@ -90,7 +90,7 @@ export function TreemapDemo({ data, width, height, layers }) {
 
     const step = Math.ceil(scheme.length / layers.length)
 
-    const [justClickedNodeId, setJustClickedNodeId] = useState<number>(0)
+    const [justClickedNodeId, setJustClickedNodeId] = useState<number>(-1)
 
     const colorScale = scaleOrdinal({
         domain: layers.map((l, i) => i),
