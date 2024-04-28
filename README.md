@@ -9,7 +9,7 @@
 
 ## Install
 
-You can install docker-phobia on your path with:
+You can install docker-phobia with:
 
 ```bash
 curl -sf https://goblin.run/github.com/remorses/docker-phobia | sh
