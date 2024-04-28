@@ -27,3 +27,5 @@ docker-phobia
 # or pass the image tag as an argument
 docker-phobia node:18-slim
 ```
+
+![example treemap](./website/public/example-docker-phobia.png)
