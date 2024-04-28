@@ -37,3 +37,7 @@ Every rectangle represents a folder or file in the image. The bigger the rectang
 The different colors represent the different layers in the image. If two rectangles have the same color, they are in the same layer. If the color shade is similar, they are from layers close to each other.
 
 ![example treemap](./website/public/example-docker-phobia.png)
+
+## How it works
+
+Execute docker-phobia to initiate a Go script that leverages [dive](https://github.com/wagoodman/dive) for Docker image retrieval and analysis, outputting a JSON file structure with file sizes. Concurrently, it spins up a server on port 8080 and launches docker-phobia.vercel.app, which visualizes the JSON data as a treemap.
