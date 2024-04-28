@@ -2,7 +2,7 @@
     <br/>
     <br/>
     <h3>docker-phobia</h3>
-    <p>Analyze Docker image and make them slim</p>
+    <p>analyze Docker images and make them slim</p>
     <br/>
     <br/>
 </div>
@@ -27,5 +27,7 @@ docker-phobia
 # or pass the image tag as an argument
 docker-phobia node:18-slim
 ```
+
+## Example Output
 
 ![example treemap](./website/public/example-docker-phobia.png)
