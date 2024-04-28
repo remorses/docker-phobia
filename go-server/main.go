@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"context"
 	"log"
+	"net"
 	"os"
 	"os/exec"
 	"os/signal"
 	"runtime"
 	"sort"
+	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -108,10 +110,13 @@ func serveWebsite(imageStr string) {
 		})
 	}).Methods("GET")
 
+	port, err := findOpenPort()
+	if err != nil {
+		log.Fatal(err)
+	}
 	go func() {
-
-		fmt.Println("Server listening on http://localhost:8080")
-		if err := http.ListenAndServe(":8080", router); err != nil {
+		fmt.Printf("internal server listening on http://localhost:%d\n", port)
+		if err := http.ListenAndServe(":"+strconv.Itoa(port), router); err != nil {
 			log.Fatal(err)
 		}
 	}()
@@ -121,8 +126,8 @@ func serveWebsite(imageStr string) {
 	if baseURL == "" {
 		baseURL = "https://docker-phobia.vercel.app"
 	}
-	path := "/image/" + imageStr
-	err := openBrowser(baseURL + path)
+	path := "/image/" + imageStr + "?port=" + strconv.Itoa(port)
+	err = openBrowser(baseURL + path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -152,6 +157,7 @@ func openBrowser(url string) error {
 func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	_userImage := vars["image"]
+	_userImage = strings.TrimSpace(_userImage)
 	userImage, err := url.QueryUnescape(_userImage)
 	if err != nil {
 		logrus.Error(err)
@@ -412,4 +418,18 @@ func enableCORS(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
+}
+
+func findOpenPort() (int, error) {
+	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
+	if err != nil {
+		return 0, err
+	}
+
+	l, err := net.ListenTCP("tcp", addr)
+	if err != nil {
+		return 0, err
+	}
+	defer l.Close()
+	return l.Addr().(*net.TCPAddr).Port, nil
 }

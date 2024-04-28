@@ -11,9 +11,11 @@ import { Chart } from 'website/src/chart'
 import { startViewTransition, useElemSize } from 'website/src/hooks'
 import { TreemapDemo } from 'website/src/visx'
 
-const baseUrl = new URL('http://localhost:8080')
-async function analyzeImage(image) {
+async function analyzeImage({ image, port }) {
+    const baseUrl = new URL('http://127.0.0.1:' + port)
+
     const u = new URL('/analyze/' + encodeURIComponent(image), baseUrl)
+
     console.log('fetching', u.toString())
     const response = await fetch(u, {
         method: 'POST',
@@ -39,8 +41,7 @@ interface ImageNode {
 export default function Home({}) {
     const router = useRouter()
     const image = router.query.image as string[]
-    console.log('image', router.query)
-
+    const port = (router.query.port as string) || '8080'
     let imageStr = image?.map((x) => decodeURIComponent(x)).join('/')
     const [data, setData] = useState<any>()
     useEffect(() => {
@@ -48,11 +49,14 @@ export default function Home({}) {
             if (!imageStr) {
                 return
             }
-            const { tree, layers } = await analyzeImage(imageStr)
+            const { tree, layers } = await analyzeImage({
+                image: imageStr,
+                port,
+            })
             return setData({ tree, layers })
         }
         get()
-    }, [imageStr])
+    }, [port, imageStr])
 
     const { tree, layers } = data || {}
 
