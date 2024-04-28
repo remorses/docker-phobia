@@ -146,6 +146,32 @@ const MapNode = memo(
         const nodeWidth = node.x1 - node.x0
         const nodeHeight = node.y1 - node.y0
         const min = 2
+        const onClick = useCallback(
+            (e) => {
+                e.stopPropagation()
+                if (!('startViewTransition' in document)) {
+                    throw new Error('startViewTransition is not supported')
+                }
+
+                flushSync(() => {
+                    setJustClickedNodeId(node.data.id)
+                })
+                // @ts-ignore
+                document.startViewTransition(
+                    () =>
+                        new Promise<void>((resolve) => {
+                            // copied from https://github.com/vercel/next.js/blob/66f8ffaa7a834f6591a12517618dce1fd69784f6/packages/next/src/client/link.tsx#L231-L233
+
+                            flushSync(() => {
+                                setZoomedNode(node.copy())
+                            })
+
+                            resolve()
+                        }),
+                )
+            },
+            [node],
+        )
         if (!nodeWidth || !nodeHeight || nodeWidth < min || nodeHeight < min) {
             return null
         }
@@ -166,29 +192,8 @@ const MapNode = memo(
                         ? `node-${node.data.id}`
                         : undefined,
                 }}
-                onClick={(e) => {
-                    e.stopPropagation()
-                    if (!('startViewTransition' in document)) {
-                        throw new Error('startViewTransition is not supported')
-                    }
-
-                    flushSync(() => {
-                        setJustClickedNodeId(node.data.id)
-                    })
-                    // @ts-ignore
-                    document.startViewTransition(
-                        () =>
-                            new Promise<void>((resolve) => {
-                                // copied from https://github.com/vercel/next.js/blob/66f8ffaa7a834f6591a12517618dce1fd69784f6/packages/next/src/client/link.tsx#L231-L233
-
-                                flushSync(() => {
-                                    setZoomedNode(node.copy())
-                                })
-
-                                resolve()
-                            }),
-                    )
-                }}
+                className='cursor-pointer'
+                onClick={onClick}
             >
                 <div
                     style={{
