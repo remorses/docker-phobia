@@ -253,10 +253,10 @@ const MapNode = memo(
                 />
                 {showText && (
                     <div
-                        className='text-black truncate text-sm absolute top-1 left-1'
+                        className='text-black truncate text-sm absolute top-[1px] left-1'
                         style={{
                             width: nodeWidth - 4,
-                            height: nodeHeight - 2,
+                            height: nodeHeight - 4,
                             color: textColor,
                         }}
                         children={text}
