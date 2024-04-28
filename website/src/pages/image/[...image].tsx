@@ -5,9 +5,10 @@ import { hierarchy } from 'd3-hierarchy'
 // yarn add @nivo/treemap
 import { useRouter } from 'next/router'
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import useSWR from 'swr'
 import { Chart } from 'website/src/chart'
-import { useElemSize } from 'website/src/hooks'
+import { startViewTransition, useElemSize } from 'website/src/hooks'
 import { TreemapDemo } from 'website/src/visx'
 
 const baseUrl = new URL('http://localhost:8080')
@@ -87,6 +88,26 @@ export default function Home({}) {
                     <div className=''>
                         Total Size: {formatFileSize(node.value)}
                     </div>
+                    {
+                        <button
+                            style={
+                                !!router.query.node
+                                    ? {}
+                                    : { opacity: 0, pointerEvents: 'none' }
+                            }
+                            onClick={() => {
+                                router.back()
+                                // startViewTransition(() => {
+                                //     flushSync(() => {
+                                //         router.back()
+                                //     })
+                                // })
+                            }}
+                            className='w-fit'
+                        >
+                            Back
+                        </button>
+                    }
                 </div>
                 <PassComponentSize className='grow'>
                     {({ width, height }) => (

@@ -5,6 +5,7 @@ import {
     startTransition,
     useCallback,
     useContext,
+    useEffect,
 } from 'react'
 
 import { RectClipPath } from '@visx/clip-path'
@@ -23,11 +24,13 @@ import {
 import { useMemo, useRef, useState } from 'react'
 import { scheme } from 'website/src/colors'
 import {
+    startViewTransition,
     useElemSize,
     useSetFinishViewTransition,
     useWindowSize,
 } from 'website/src/hooks'
 import { flushSync } from 'react-dom'
+import { useRouter } from 'next/router'
 
 const background = '#114b5f'
 
@@ -74,8 +77,24 @@ export function TreemapDemo({
 }) {
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
-
+    const router = useRouter()
     const [zoomedNode, setZoomedNode] = useState(node)
+
+    useEffect(() => {
+        if (!router.query.node) {
+            setZoomedNode(node)
+            return
+        }
+        const nodeId = Number(router.query.node)
+        if (!nodeId) {
+            return
+        }
+        const found = node.descendants().find((n) => n.data.id === nodeId)
+        if (!found) {
+            return
+        }
+        setZoomedNode(found.copy())
+    }, [node, router.query.node])
 
     const treemapElem = useMemo(() => {
         const treemap = d3treemap<any>()
@@ -146,31 +165,32 @@ const MapNode = memo(
         const nodeWidth = node.x1 - node.x0
         const nodeHeight = node.y1 - node.y0
         const min = 2
+        const router = useRouter()
         const onClick = useCallback(
             (e) => {
                 e.stopPropagation()
-                if (!('startViewTransition' in document)) {
-                    throw new Error('startViewTransition is not supported')
-                }
 
                 flushSync(() => {
                     setJustClickedNodeId(node.data.id)
                 })
-                // @ts-ignore
-                document.startViewTransition(
-                    () =>
-                        new Promise<void>((resolve) => {
-                            // copied from https://github.com/vercel/next.js/blob/66f8ffaa7a834f6591a12517618dce1fd69784f6/packages/next/src/client/link.tsx#L231-L233
 
-                            flushSync(() => {
-                                setZoomedNode(node.copy())
-                            })
-
-                            resolve()
-                        }),
-                )
+                startViewTransition(() => {
+                    flushSync(() => {
+                        router.push(
+                            {
+                                query: {
+                                    ...router.query,
+                                    node: node.data.id,
+                                },
+                            },
+                            undefined,
+                            { shallow: true },
+                        )
+                        // setZoomedNode(node.copy())
+                    })
+                })
             },
-            [node],
+            [node, router.query],
         )
         if (!nodeWidth || !nodeHeight || nodeWidth < min || nodeHeight < min) {
             return null

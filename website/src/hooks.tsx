@@ -1,6 +1,12 @@
-import { useState, useEffect, useLayoutEffect, use, createContext, useContext } from 'react'
+import {
+    useState,
+    useEffect,
+    useLayoutEffect,
+    use,
+    createContext,
+    useContext,
+} from 'react'
 import type { Dispatch, SetStateAction } from 'react'
-
 
 export function useWindowSize() {
     const [size, setSize] = useState({
@@ -76,4 +82,12 @@ export function ViewTransitions({
 
 export function useSetFinishViewTransition() {
     return useContext(ViewTransitionsContext)
+}
+
+export function startViewTransition(fn: () => any) {
+    if (!('startViewTransition' in document)) {
+        fn()
+    }
+    // @ts-ignore
+    return document.startViewTransition(fn)
 }
