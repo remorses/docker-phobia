@@ -5,6 +5,7 @@
         "test": "NODE_ENV=test vitest",
         "watch": "pnpm -r watch",
         "build": "pnpm -r build",
+        "cli": "cd go-server && DOCKER_PHOBIA_BASE_URL=http://localhost:9696 gow run main.go",
         "release": "pnpm build && changeset"
     },
     "devDependencies": {

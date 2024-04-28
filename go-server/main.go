@@ -2,8 +2,14 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"log"
+	"os"
+	"os/exec"
+	"runtime"
 	"sort"
+	"strings"
+	"sync"
 	"time"
 
 	"net/url"
@@ -11,6 +17,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/client"
+	"github.com/manifoldco/promptui"
+	"github.com/urfave/cli/v2"
 
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
@@ -21,12 +32,70 @@ import (
 )
 
 func main() {
+	app := &cli.App{
+		Name:  "docker-phobia",
+		Usage: "Analyze a Docker image",
+		Action: func(c *cli.Context) error {
+			var selectedImage string
+			ctx := context.Background()
+			cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
+			if err != nil {
+				return err
+			}
+
+			if c.NArg() > 0 {
+				selectedImage = c.Args().Get(0)
+			} else {
+				images, err := cli.ImageList(ctx, types.ImageListOptions{})
+				if err != nil {
+					return err
+				}
+
+				sort.Slice(images, func(i, j int) bool {
+					return images[i].Created > images[j].Created
+				})
+
+				imageNames := make([]string, 0)
+				for _, image := range images {
+					if len(image.RepoTags) > 0 {
+						imageNames = append(imageNames, image.RepoTags[0])
+					}
+				}
+
+				prompt := promptui.Select{
+					Label: "Select a Docker image",
+					Items: imageNames,
+				}
+
+				_, selectedImage, err = prompt.Run()
+				if err != nil {
+					return err
+				}
+			}
+
+			selectedImage = strings.TrimSpace(selectedImage)
+
+			serveWebsite(selectedImage)
+
+			// Process the chosen Docker image
+			return nil
+		},
+	}
+
+	err := app.Run(os.Args)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+}
+
+func serveWebsite(imageStr string) {
 	router := mux.NewRouter()
 
 	router.Use(enableCORS)
 
 	router.HandleFunc("/analyze/{image:.*}", imageAnalyzerHandler).Methods("POST", "GET")
-	router.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(struct {
 			Version string `json:"version"`
@@ -37,8 +106,43 @@ func main() {
 		})
 	}).Methods("GET")
 
-	fmt.Println("Server listening on http://localhost:8080")
-	http.ListenAndServe(":8080", router)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		fmt.Println("Server listening on http://localhost:8080")
+		if err := http.ListenAndServe(":8080", router); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	// Open the browser
+	baseURL := os.Getenv("DOCKER_PHOBIA_BASE_URL")
+	if baseURL == "" {
+		baseURL = "https://docker-phobia.vercel.app"
+	}
+	path := "/image/" + imageStr
+	err := openBrowser(baseURL + path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	wg.Wait()
+
+}
+
+func openBrowser(url string) error {
+	var err error
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	return err
 }
 
 func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
