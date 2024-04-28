@@ -31,7 +31,7 @@ import { flushSync } from 'react-dom'
 
 const background = '#114b5f'
 
-const margin = { top: 10, left: 10, right: 10, bottom: 10 }
+const margin = { top: 0, left: 0, right: 0, bottom: 0 }
 
 export type TreemapProps = {
     width: number
@@ -61,31 +61,28 @@ const context = createContext<{
     setJustClickedNodeId: (id: number) => void
 }>({} as any)
 
-export function TreemapDemo({ data, width, height, layers }) {
+export function TreemapDemo({
+    node,
+    width,
+    height,
+    layers,
+}: {
+    node: HierarchyNode<any>
+    width: number
+    height: number
+    layers: any[]
+}) {
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
 
-    const [zoomedNode, setZoomedNode] = useState(() => {
-        let i = 0
-        let nodes = hierarchy(data)
-            .sort((a, b) => (b.value || 0) - (a.value || 0))
-            .sum((d) => d.value || 0)
-            .each((x) => {
-                i++
-                x.data.id = i
-                // return x
-            })
-        console.log('nodes', nodes)
-
-        return nodes
-    })
+    const [zoomedNode, setZoomedNode] = useState(node)
 
     const treemapElem = useMemo(() => {
         const treemap = d3treemap<any>()
             .tile(treemapBinary)
             .size([xMax, yMax])
 
-            .padding(6)
+            .padding(7)
             .paddingTop(26)
 
         return treemap(zoomedNode as any)
@@ -155,7 +152,7 @@ const MapNode = memo(
         // if (nodeWidth < 1 || nodeHeight <div 1) {
         //     return null
         // }
-        const text = `${node.data.name} ${node.data.layer || ''}`
+        const text = `${node.data.name}`
         const showText = nodeWidth > 40 && nodeHeight > 14
 
         return (
@@ -193,14 +190,6 @@ const MapNode = memo(
                     )
                 }}
             >
-                {showText && (
-                    <RectClipPath
-                        id={`clip-${i}`}
-                        width={nodeWidth - 4}
-                        height={nodeHeight - 2}
-                        // strokeWidth={2}
-                    />
-                )}
                 <div
                     style={{
                         width: nodeWidth,
@@ -214,9 +203,11 @@ const MapNode = memo(
                 />
                 {showText && (
                     <div
-                        className='text-black text-sm absolute top-0 left-0'
+                        className='text-black truncate text-sm absolute top-1 left-1'
                         style={{
                             clipPath: `url(#clip-${i})`,
+                            width: nodeWidth - 4,
+                            height: nodeHeight - 2,
                         }}
                         children={text}
                     />

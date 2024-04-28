@@ -1,9 +1,10 @@
 'skip ssr'
 
+import { hierarchy } from 'd3-hierarchy'
 // install (please try to align the version of installed @nivo packages)
 // yarn add @nivo/treemap
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import useSWR from 'swr'
 import { Chart } from 'website/src/chart'
 import { useElemSize } from 'website/src/hooks'
@@ -52,28 +53,67 @@ export default function Home({}) {
         get()
     }, [imageStr])
 
-    if (!data || !image) {
-        return <div>Loading...</div>
-    }
-    const { tree, layers } = data
+    const { tree, layers } = data || {}
 
+    const node = useMemo(() => {
+        if (!tree) {
+            return null
+        }
+        let i = 0
+        let node = hierarchy(tree)
+            .sort((a, b) => (b.value || 0) - (a.value || 0))
+            .sum((d) => d.value || 0)
+            .each((x) => {
+                i++
+                x.data.id = i
+                // return x
+            })
+
+        return node
+    }, [tree])
+    if (!data || !image || !node) {
+        return (
+            <div className='flex h-full grow items-center justify-center flex-col gap-6 w-full'>
+                <div>Loading image...</div>
+            </div>
+        )
+    }
     return (
         <Suspense>
-            <div className='flex h-full flex-col w-full'>
-                <div className='h-[300px] w-full'></div>
+            <div className='flex h-full p-8 flex-col gap-6 w-full'>
+                <div className='w-full flex text-sm flex-col gap-4 font-mono'>
+                    <div className=''>Image: {imageStr}</div>
+
+                    <div className=''>
+                        Total Size: {formatFileSize(node.value)}
+                    </div>
+                </div>
                 <PassComponentSize className='grow'>
                     {({ width, height }) => (
                         <TreemapDemo
                             width={width}
                             height={height}
                             layers={layers}
-                            data={tree}
+                            node={node}
                         />
                     )}
                 </PassComponentSize>
             </div>
         </Suspense>
     )
+}
+
+function formatFileSize(bytes) {
+    console.log('bytes', bytes)
+    if (bytes < 1024) {
+        return bytes + ' bytes'
+    } else if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(2) + ' KB'
+    } else if (bytes < 1024 * 1024 * 1024) {
+        return (bytes / 1024 / 1024).toFixed(2) + ' MB'
+    } else {
+        return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB'
+    }
 }
 
 function PassComponentSize({ children, ...rest }) {

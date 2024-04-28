@@ -37,3 +37,9 @@ body {
         text-wrap: balance;
     }
 }
+
+html {
+    /* optimization: */
+    /* tell page you arent transitioning the whole page */
+    view-transition-name: none;
+}
