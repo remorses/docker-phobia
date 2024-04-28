@@ -183,7 +183,7 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	println("Analyzed image:", userImage)
+	println("analyzed image:", userImage)
 	// Send a response with the json
 	w.Header().Set("Content-Type", "application/json")
 	var buf bytes.Buffer
