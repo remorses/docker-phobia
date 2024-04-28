@@ -6,10 +6,11 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"runtime"
 	"sort"
 	"strings"
-	"sync"
+	"syscall"
 	"time"
 
 	"net/url"
@@ -87,6 +88,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}
+
 }
 
 func serveWebsite(imageStr string) {
@@ -106,10 +108,8 @@ func serveWebsite(imageStr string) {
 		})
 	}).Methods("GET")
 
-	var wg sync.WaitGroup
-	wg.Add(1)
 	go func() {
-		defer wg.Done()
+
 		fmt.Println("Server listening on http://localhost:8080")
 		if err := http.ListenAndServe(":8080", router); err != nil {
 			log.Fatal(err)
@@ -126,7 +126,11 @@ func serveWebsite(imageStr string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	wg.Wait()
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	<-sigChan
+	os.Exit(0)
 
 }
 
