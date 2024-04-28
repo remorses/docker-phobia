@@ -65,9 +65,19 @@ func main() {
 					}
 				}
 
+				searcher := func(input string, index int) bool {
+					image := imageNames[index]
+					name := strings.Replace(strings.ToLower(image), " ", "", -1)
+					input = strings.Replace(strings.ToLower(input), " ", "", -1)
+
+					return strings.Contains(name, input)
+				}
+
 				prompt := promptui.Select{
-					Label: "Select a Docker image",
-					Items: imageNames,
+					Label:    "Select a Docker image",
+					Size:     20,
+					Searcher: searcher,
+					Items:    imageNames,
 				}
 
 				_, selectedImage, err = prompt.Run()
@@ -173,7 +183,7 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
-	println("Analyzed image: ", userImage)
+	println("Analyzed image:", userImage)
 	// Send a response with the json
 	w.Header().Set("Content-Type", "application/json")
 	var buf bytes.Buffer
