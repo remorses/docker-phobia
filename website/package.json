@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev -p 9696",
+        "dev": "NODE_ENV=development next dev -p 9696",
         "build": "next build",
         "start": "next start -p 9696",
         "lint": "next lint"
@@ -28,6 +28,7 @@
         "react": "^18.3.1",
         "react-d3-treemap": "^1.0.29",
         "react-dom": "^18.3.1",
+        "react-spinners": "^0.13.8",
         "swr": "^2.2.5"
     },
     "devDependencies": {

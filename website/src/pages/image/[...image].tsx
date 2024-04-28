@@ -1,4 +1,5 @@
 'skip ssr'
+import ClipLoader from 'react-spinners/BarLoader'
 
 import { hierarchy } from 'd3-hierarchy'
 // install (please try to align the version of installed @nivo packages)
@@ -21,7 +22,10 @@ async function analyzeImage({ image, port }) {
         method: 'POST',
     })
     if (!response.ok) {
-        throw new Error('Failed to analyze image: ' + (await response.text()))
+        throw new Error(
+            'Failed to analyze image ${response.status}: ' +
+                (await response.text()),
+        )
     }
     return response.json() as any as JsonOutput
 }
@@ -43,9 +47,11 @@ export default function Home({}) {
     const image = router.query.image as string[]
     const port = (router.query.port as string) || '8080'
     let imageStr = image?.map((x) => decodeURIComponent(x)).join('/')
+    const [error, setError] = useState<string>()
     const [data, setData] = useState<any>()
     useEffect(() => {
         const get = async () => {
+            setError('')
             if (!imageStr) {
                 return
             }
@@ -53,9 +59,9 @@ export default function Home({}) {
                 image: imageStr,
                 port,
             })
-            return setData({ tree, layers })
+            setData({ tree, layers })
         }
-        get()
+        get().catch((e) => setError(e.message))
     }, [port, imageStr])
 
     const { tree, layers } = data || {}
@@ -76,10 +82,18 @@ export default function Home({}) {
 
         return node
     }, [tree])
+    if (error) {
+        return (
+            <div className='flex text-red-300 h-full grow items-center justify-center flex-col gap-6 w-full'>
+                <div>{error}</div>
+            </div>
+        )
+    }
     if (!data || !image || !node) {
         return (
-            <div className='flex h-full grow items-center justify-center flex-col gap-6 w-full'>
-                <div>Loading image...</div>
+            <div className='flex h-full grow items-center justify-center flex-col gap-12 w-full'>
+                <div>Loading Image</div>
+                <ClipLoader width={140} color='#fff' />
             </div>
         )
     }

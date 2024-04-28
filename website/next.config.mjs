@@ -4,6 +4,9 @@ import { withElacca } from 'elacca'
 const nextConfig = {
     reactStrictMode: false,
     async redirects() {
+        if (process.env.NODE_ENV === 'development') {
+            return []
+        }
         // redirect / to github
         return [
             {
