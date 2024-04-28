@@ -13,6 +13,8 @@ You can install docker-phobia on your path with:
 
 ```bash
 curl -sf http://goblin.run/github.com/remorses/docker-phobia | sh
+# or if you have go installed
+go install github.com/remorses/docker-phobia
 ```
 
 ## Usage

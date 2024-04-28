@@ -295,7 +295,7 @@ const MapNode = memo(
 )
 
 function nodeToPath(node: HierarchyNode<any>) {
-    const path = []
+    const path = [] as string[]
     let current = node
     while (current) {
         path.push(current!.data.name)
