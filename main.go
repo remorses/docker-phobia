@@ -248,7 +248,7 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 		imgCache[userImage] = img
 	}
 
-	println("fetched image in", time.Since(start).Seconds())
+	fmt.Printf("fetched image in %d seconds\n", int(time.Since(start).Seconds()))
 
 	println("analyzing")
 	result, err := img.Analyze()
