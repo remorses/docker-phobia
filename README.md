@@ -30,4 +30,8 @@ docker-phobia node:18-slim
 
 ## Example Output
 
+Every rectangle represents a folder or file in the image. The bigger the rectangle, the more space it takes up.
+
+The different colors represent the different layers in the image. If two rectangles have the same color, they are in the same layer. If the color shade is similar, they are from layers close to each other.
+
 ![example treemap](./website/public/example-docker-phobia.png)
