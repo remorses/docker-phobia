@@ -1,4 +1,6 @@
 'use client'
+import Tippy from '@tippyjs/react/headless'
+
 import { colord } from 'colord'
 
 import {
@@ -63,6 +65,7 @@ const context = createContext<{
     zoomedNode: HierarchyNode<any>
     setZoomedNode: (node: HierarchyNode<any>) => void
     colorScale: any
+    layers: any[]
     justClickedNodeId: number
     setJustClickedNodeId: (id: number) => void
 }>({} as any)
@@ -133,6 +136,7 @@ export function TreemapDemo({
             value={{
                 // @ts-ignore
                 zoomedNode,
+                layers,
                 setZoomedNode,
                 colorScale,
                 justClickedNodeId,
@@ -162,6 +166,7 @@ const MapNode = memo(
         const {
             justClickedNodeId,
             setZoomedNode,
+            layers,
             setJustClickedNodeId,
             colorScale,
         } = useContext(context)
@@ -252,17 +257,49 @@ const MapNode = memo(
                     }}
                 />
                 {showText && (
-                    <div
-                        className='text-black truncate text-sm absolute top-[1px] left-1'
-                        style={{
-                            width: nodeWidth - 4,
-                            height: nodeHeight - 4,
-                            color: textColor,
+                    <Tippy
+                        render={(attrs) => {
+                            const layer = layers.find(
+                                (l, i) => i === node.data.layer,
+                            )
+                            return (
+                                <div
+                                    {...attrs}
+                                    className='text-white text-xs flex flex-col gap-1 font-mono max-w-[800px] rounded p-2 bg-black'
+                                >
+                                    <div className=''>
+                                        path: {nodeToPath(node)}
+                                    </div>
+                                    <div className='truncate'>
+                                        layer: {layer?.command}
+                                    </div>
+                                </div>
+                            )
                         }}
-                        children={text}
-                    />
+                    >
+                        <div
+                            className='text-black treemap-text truncate text-sm absolute top-[1px] left-1'
+                            style={{
+                                maxWidth: nodeWidth - 4,
+                                maxHeight: nodeHeight - 4,
+                                color: textColor,
+                            }}
+                            data-tippy-content={text}
+                            children={text}
+                        />
+                    </Tippy>
                 )}
             </div>
         )
     },
 )
+
+function nodeToPath(node: HierarchyNode<any>) {
+    const path = []
+    let current = node
+    while (current) {
+        path.push(current!.data.name)
+        current = current.parent!
+    }
+    return path.reverse().join('/')
+}

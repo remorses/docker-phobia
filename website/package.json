@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@babel/plugin-syntax-jsx": "^7.24.1",
+        "@tippyjs/react": "^4.2.6",
         "@types/d3": "^7.4.3",
         "@types/d3-hierarchy": "^3.1.7",
         "@types/d3-scale-chromatic": "^3.0.3",
@@ -30,7 +31,8 @@
         "react-d3-treemap": "^1.0.29",
         "react-dom": "^18.3.1",
         "react-spinners": "^0.13.8",
-        "swr": "^2.2.5"
+        "swr": "^2.2.5",
+        "tippy.js": "^6.3.7"
     },
     "devDependencies": {
         "@types/node": "^20",
