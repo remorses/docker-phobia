@@ -20,6 +20,7 @@
         "@visx/responsive": "latest",
         "@visx/scale": "latest",
         "@visx/text": "^3.3.0",
+        "colord": "^2.9.3",
         "d3": "^7.9.0",
         "d3-hierarchy": "^3.1.2",
         "d3-scale-chromatic": "^3.1.0",

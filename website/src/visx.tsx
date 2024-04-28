@@ -1,4 +1,6 @@
 'use client'
+import { colord } from 'colord'
+
 import {
     createContext,
     memo,
@@ -55,7 +57,8 @@ function contains(id, b: HierarchyNode<any>, level = 2) {
     }
     return contains(id, b.parent, level - 1)
 }
-
+const white = '#fff'
+const black = '#444'
 const context = createContext<{
     zoomedNode: HierarchyNode<any>
     setZoomedNode: (node: HierarchyNode<any>) => void
@@ -192,14 +195,36 @@ const MapNode = memo(
             },
             [node, router.query],
         )
-        if (!nodeWidth || !nodeHeight || nodeWidth < min || nodeHeight < min) {
-            return null
-        }
+
         // if (nodeWidth < 1 || nodeHeight <div 1) {
         //     return null
         // }
         const text = `${node.data.name}`
         const showText = nodeWidth > 40 && nodeHeight > 14
+
+        const backgroundColor = colorScale(node.data.layer || 0)
+
+        const textColor = useMemo(() => {
+            const color = colord(backgroundColor)
+            if (color.isLight()) {
+                return black
+            }
+            return white
+        }, [backgroundColor])
+
+        const borderColor = useMemo(() => {
+            const backgroundColorOut = colorScale(node.parent?.data?.layer || 0)
+            const color = colord(backgroundColorOut)
+            if (color.isLight()) {
+                return black
+            }
+            if (textColor === white) {
+                return white
+            }
+        }, [textColor])
+        if (!nodeWidth || !nodeHeight || nodeWidth < min || nodeHeight < min) {
+            return null
+        }
 
         return (
             <div
@@ -219,10 +244,10 @@ const MapNode = memo(
                     style={{
                         width: nodeWidth,
                         height: nodeHeight,
-                        stroke: '#000',
-                        backgroundColor: colorScale(node.data.layer || 0),
+                        stroke: black,
+                        backgroundColor,
                         // borderRadius: 4,
-                        borderColor: '#000',
+                        borderColor,
                         borderWidth: 2,
                     }}
                 />
@@ -230,9 +255,9 @@ const MapNode = memo(
                     <div
                         className='text-black truncate text-sm absolute top-1 left-1'
                         style={{
-                            clipPath: `url(#clip-${i})`,
                             width: nodeWidth - 4,
                             height: nodeHeight - 2,
+                            color: textColor,
                         }}
                         children={text}
                     />
