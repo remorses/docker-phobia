@@ -174,7 +174,7 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	println("Analyzing image: ", userImage)
+	println("analyzing image:", userImage)
 	output, err := analyzeImage(userImage)
 	if err != nil {
 
@@ -247,7 +247,8 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 		}
 		imgCache[userImage] = img
 	}
-	log.Println("fetched image in", time.Since(start).Seconds())
+
+	println("fetched image in", time.Since(start).Seconds())
 
 	println("analyzing")
 	result, err := img.Analyze()
@@ -431,12 +432,25 @@ func enableCORS(next http.Handler) http.Handler {
 }
 
 func findOpenPort() (int, error) {
-	addr, err := net.ResolveTCPAddr("tcp", "localhost:0")
+	// Check if port 8080 is available
+	addr, err := net.ResolveTCPAddr("tcp", "localhost:8080")
 	if err != nil {
 		return 0, err
 	}
 
 	l, err := net.ListenTCP("tcp", addr)
+	if err == nil {
+		defer l.Close()
+		return l.Addr().(*net.TCPAddr).Port, nil
+	}
+
+	// If port 8080 is not available, find an open port using the zero trick
+	addr, err = net.ResolveTCPAddr("tcp", "localhost:0")
+	if err != nil {
+		return 0, err
+	}
+
+	l, err = net.ListenTCP("tcp", addr)
 	if err != nil {
 		return 0, err
 	}
