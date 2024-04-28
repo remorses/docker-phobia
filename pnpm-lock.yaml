@@ -27,8 +27,6 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0(@types/node@20.12.7)(terser@5.30.4)
 
-  new-package-template: {}
-
   website:
     dependencies:
       '@babel/plugin-syntax-jsx':

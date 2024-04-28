@@ -1,4 +1,4 @@
-module github.com/remorses/docker-phobia/go-server
+module github.com/remorses/docker-phobia
 
 go 1.20
 
