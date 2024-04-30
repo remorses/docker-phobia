@@ -26,7 +26,7 @@ import {
 } from 'd3-hierarchy'
 
 import { useMemo, useRef, useState } from 'react'
-import { scheme } from 'website/src/colors'
+import { scheme, schemeRed } from 'website/src/colors'
 import {
     startViewTransition,
     useElemSize,
@@ -65,7 +65,8 @@ const black = '#444'
 const context = createContext<{
     zoomedNode: HierarchyNode<any>
     setZoomedNode: (node: HierarchyNode<any>) => void
-    colorScale: any
+    colorScale: Function
+    deletedColorScale: Function
     layers: any[]
     justClickedNodeId: number
     fontScale: Function
@@ -136,6 +137,16 @@ export function TreemapDemo({
             }),
         [],
     )
+    const deletedColorScale = useMemo(
+        () =>
+            scaleOrdinal({
+                domain: layers.map((l, i) => i),
+                // skip some steps so scheme len is same as layers len
+
+                range: schemeRed.filter((_, i) => i % step === 0),
+            }),
+        [],
+    )
 
     if (!width || !height) {
         return null
@@ -148,6 +159,7 @@ export function TreemapDemo({
                 layers,
                 setZoomedNode,
                 colorScale,
+                deletedColorScale,
                 justClickedNodeId,
                 setJustClickedNodeId,
                 fontScale,
@@ -179,6 +191,7 @@ const MapNode = memo(
             layers,
             setJustClickedNodeId,
             colorScale,
+            deletedColorScale,
         } = useContext(context)
         const nodeWidth = node.x1 - node.x0
         const nodeHeight = node.y1 - node.y0
@@ -217,7 +230,16 @@ const MapNode = memo(
         const text = `${node.data.name}`
         const showText = nodeWidth > 40 && nodeHeight > 14
 
-        const backgroundColor = colorScale(node.data.layer || 0)
+        function getBg(node) {
+            if (!node) {
+                return 'transparent'
+            }
+            if (node.data.deleted) {
+                return deletedColorScale(node.data.layer || 0)
+            }
+            return colorScale(node.data.layer || 0)
+        }
+        const backgroundColor = getBg(node)
 
         const textColor = useMemo(() => {
             const color = colord(backgroundColor)
@@ -228,7 +250,7 @@ const MapNode = memo(
         }, [backgroundColor])
 
         const borderColor = useMemo(() => {
-            const backgroundColorOut = colorScale(node.parent?.data?.layer || 0)
+            const backgroundColorOut = getBg(node.parent)
             const color = colord(backgroundColorOut)
             if (color.isLight()) {
                 return black

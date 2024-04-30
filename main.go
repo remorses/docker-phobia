@@ -352,8 +352,9 @@ type JsonOutput struct {
 // Node represents a node in the new tree without cycles.
 // rename all fields to lowercase in json output
 type Node struct {
-	Size int32  `json:"value,omitempty"`
-	Name string `json:"name"`
+	Size    int32  `json:"value,omitempty"`
+	Name    string `json:"name"`
+	Deleted bool   `json:"deleted,omitempty"`
 	// omit this in json
 	Data     filetree.NodeData `json:"-"`
 	Path     string            `json:"-"`
@@ -380,15 +381,19 @@ func RemoveCycles(root *filetree.FileNode) *Node {
 func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNode]bool, parent *filetree.FileNode) []*Node {
 	if _, ok := visited[node]; ok {
 		// Cycle detected, skip this node
-		return nil
+		return []*Node{}
+	}
+	// skip small files
+	if len(node.Children) == 0 && node.Data.DiffType != filetree.Removed && node.Data.FileInfo.Size < 1024 {
+		return []*Node{}
 	}
 
 	visited[node] = true
 	defer delete(visited, node)
 
-	if node.Data.DiffType == filetree.Removed {
-		return nil
-	}
+	// if node.Data.DiffType == filetree.Removed {
+	// 	return nil
+	// }
 
 	size := int32(node.Data.FileInfo.Size)
 
@@ -397,16 +402,19 @@ func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNo
 	}
 
 	newNode := &Node{
-		Size: size,
-		Name: node.Name,
-		Data: node.Data,
-		Path: node.Path(),
+		Size:    size,
+		Name:    node.Name,
+		Data:    node.Data,
+		Path:    node.Path(),
+		Deleted: node.Data.DiffType == filetree.Removed,
 	}
 
 	for _, child := range node.Children {
+
 		childNodes := removeCyclesRecursive(child, visited, node)
+
 		newNode.Children = append(newNode.Children, childNodes...)
-		// sort them by size
+
 		sort.Slice(newNode.Children, func(i, j int) bool {
 			return newNode.Children[i].Name < newNode.Children[j].Name
 		})
