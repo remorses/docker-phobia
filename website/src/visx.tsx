@@ -14,7 +14,7 @@ import {
 
 import { RectClipPath } from '@visx/clip-path'
 
-import { scaleOrdinal } from '@visx/scale'
+import { scaleOrdinal, scaleSqrt } from '@visx/scale'
 
 import { Group } from '@visx/group'
 import { hierarchy, treemapBinary } from '@visx/hierarchy'
@@ -35,6 +35,7 @@ import {
 } from 'website/src/hooks'
 import { flushSync } from 'react-dom'
 import { useRouter } from 'next/router'
+import d3 from 'd3'
 
 const background = '#114b5f'
 
@@ -67,6 +68,7 @@ const context = createContext<{
     colorScale: any
     layers: any[]
     justClickedNodeId: number
+    fontScale: Function
     setJustClickedNodeId: (id: number) => void
 }>({} as any)
 
@@ -85,6 +87,13 @@ export function TreemapDemo({
     const yMax = height - margin.top - margin.bottom
     const router = useRouter()
     const [zoomedNode, setZoomedNode] = useState(node)
+
+    const fontScale = useMemo(() => {
+        const nodes = node.descendants().map((x) => x.value || 0)
+        return scaleSqrt<number>()
+            .domain([Math.min(...nodes)!, Math.max(...nodes)!])
+            .range([12, 46])
+    }, [node])
 
     useEffect(() => {
         if (!router.query.node) {
@@ -108,7 +117,7 @@ export function TreemapDemo({
             .size([xMax, yMax])
 
             .padding(7)
-            .paddingTop(26)
+            .paddingTop((x) => fontScale(x.value!) + 20)
 
         return treemap(zoomedNode as any)
     }, [zoomedNode])
@@ -141,6 +150,7 @@ export function TreemapDemo({
                 colorScale,
                 justClickedNodeId,
                 setJustClickedNodeId,
+                fontScale,
             }}
         >
             <div
@@ -165,7 +175,7 @@ const MapNode = memo(
     ({ node, i }: { node: HierarchyRectangularNode<any>; i: number }) => {
         const {
             justClickedNodeId,
-            setZoomedNode,
+            fontScale,
             layers,
             setJustClickedNodeId,
             colorScale,
@@ -249,46 +259,47 @@ const MapNode = memo(
                     style={{
                         width: nodeWidth,
                         height: nodeHeight,
-                        stroke: black,
                         backgroundColor,
-                        // borderRadius: 4,
                         borderColor,
                         borderWidth: 2,
                     }}
-                />
-                {showText && (
-                    <Tippy
-                        render={(attrs) => {
-                            const layer = layers.find(
-                                (l, i) => i === node.data.layer,
-                            )
-                            return (
-                                <div
-                                    {...attrs}
-                                    className='text-white text-xs flex flex-col gap-1 font-mono max-w-[800px] rounded p-2 bg-black'
-                                >
-                                    <div className=''>
-                                        path: {nodeToPath(node)}
+                    className='flex flex-col pl-2'
+                >
+                    {showText && (
+                        <Tippy
+                            render={(attrs) => {
+                                const layer = layers.find(
+                                    (l, i) => i === node.data.layer,
+                                )
+                                return (
+                                    <div
+                                        {...attrs}
+                                        className='text-white text-xs flex flex-col gap-1 font-mono max-w-[800px] rounded p-2 bg-black'
+                                    >
+                                        <div className=''>
+                                            path: {nodeToPath(node)}
+                                        </div>
+                                        <div className='truncate'>
+                                            layer: {layer?.command}
+                                        </div>
                                     </div>
-                                    <div className='truncate'>
-                                        layer: {layer?.command}
-                                    </div>
-                                </div>
-                            )
-                        }}
-                    >
-                        <div
-                            className='text-black treemap-text truncate text-sm absolute top-[1px] left-1'
-                            style={{
-                                maxWidth: nodeWidth - 4,
-                                maxHeight: nodeHeight - 4,
-                                color: textColor,
+                                )
                             }}
-                            data-tippy-content={text}
-                            children={text}
-                        />
-                    </Tippy>
-                )}
+                        >
+                            <div
+                                className='text-black truncate '
+                                style={{
+                                    maxWidth: nodeWidth - 4,
+                                    maxHeight: nodeHeight - 4,
+                                    color: textColor,
+                                    fontSize: fontScale(node.value),
+                                }}
+                                data-tippy-content={text}
+                                children={text}
+                            />
+                        </Tippy>
+                    )}
+                </div>
             </div>
         )
     },
