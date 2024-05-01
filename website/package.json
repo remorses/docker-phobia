@@ -28,7 +28,6 @@
         "elacca": "^0.5.3",
         "next": "14.2.3",
         "react": "^18.3.1",
-        "react-d3-treemap": "^1.0.29",
         "react-dom": "^18.3.1",
         "react-spinners": "^0.13.8",
         "swr": "^2.2.5",

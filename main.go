@@ -380,10 +380,10 @@ func RemoveCycles(root *filetree.FileNode) *Node {
 
 func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNode]bool, parent *filetree.FileNode) []*Node {
 	if _, ok := visited[node]; ok {
-		// Cycle detected, skip this node
+
 		return []*Node{}
 	}
-	// skip small files
+
 	if len(node.Children) == 0 && node.Data.DiffType != filetree.Removed && node.Data.FileInfo.Size < 100 {
 		return []*Node{}
 	}
