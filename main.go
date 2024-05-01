@@ -279,7 +279,7 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 			return nil, err
 		}
 		mergedTree.VisitDepthChildFirst(func(node *filetree.FileNode) error {
-			if node.Data.DiffType == filetree.Added {
+			if node.Data.DiffType == filetree.Added || node.Data.DiffType == filetree.Removed {
 				pathsToLayersIndex[node.Path()] = idx
 			}
 			return nil
@@ -384,7 +384,7 @@ func removeCyclesRecursive(node *filetree.FileNode, visited map[*filetree.FileNo
 		return []*Node{}
 	}
 	// skip small files
-	if len(node.Children) == 0 && node.Data.DiffType != filetree.Removed && node.Data.FileInfo.Size < 1024 {
+	if len(node.Children) == 0 && node.Data.DiffType != filetree.Removed && node.Data.FileInfo.Size < 100 {
 		return []*Node{}
 	}
 
