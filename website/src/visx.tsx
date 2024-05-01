@@ -3,39 +3,20 @@ import Tippy from '@tippyjs/react/headless'
 
 import { colord } from 'colord'
 
-import {
-    createContext,
-    memo,
-    startTransition,
-    useCallback,
-    useContext,
-    useEffect,
-} from 'react'
-
-import { RectClipPath } from '@visx/clip-path'
+import { createContext, memo, useCallback, useContext, useEffect } from 'react'
 
 import { scaleOrdinal, scaleSqrt } from '@visx/scale'
 
-import { Group } from '@visx/group'
-import { hierarchy, treemapBinary } from '@visx/hierarchy'
-import { Text } from '@visx/text'
+import { treemapBinary } from '@visx/hierarchy'
 import {
     HierarchyNode,
     HierarchyRectangularNode,
     treemap as d3treemap,
 } from 'd3-hierarchy'
 
-import { useMemo, useRef, useState } from 'react'
-import { scheme, schemeRed } from 'website/src/colors'
-import {
-    startViewTransition,
-    useElemSize,
-    useSetFinishViewTransition,
-    useWindowSize,
-} from 'website/src/hooks'
-import { flushSync } from 'react-dom'
 import { useRouter } from 'next/router'
-import d3 from 'd3'
+import { useMemo, useState } from 'react'
+import { scheme, schemeRed } from 'website/src/colors'
 
 const background = '#114b5f'
 
@@ -47,19 +28,6 @@ export type TreemapProps = {
     margin?: { top: number; right: number; bottom: number; left: number }
 }
 
-function contains(id, b: HierarchyNode<any>, level = 2) {
-    if (!level) {
-        return false
-    }
-    if (id === b.data.id) {
-        return true
-    }
-
-    if (!b.parent) {
-        return false
-    }
-    return contains(id, b.parent, level - 1)
-}
 const white = '#fff'
 const black = '#444'
 const context = createContext<{
@@ -68,9 +36,8 @@ const context = createContext<{
     colorScale: Function
     deletedColorScale: Function
     layers: any[]
-    justClickedNodeId: number
+
     fontScale: Function
-    setJustClickedNodeId: (id: number) => void
 }>({} as any)
 
 export function TreemapDemo({
@@ -125,8 +92,6 @@ export function TreemapDemo({
 
     const step = Math.ceil(scheme.length / layers.length)
 
-    const [justClickedNodeId, setJustClickedNodeId] = useState<number>(-1)
-
     const colorScale = useMemo(
         () =>
             scaleOrdinal({
@@ -160,8 +125,6 @@ export function TreemapDemo({
                 setZoomedNode,
                 colorScale,
                 deletedColorScale,
-                justClickedNodeId,
-                setJustClickedNodeId,
                 fontScale,
             }}
         >
@@ -185,14 +148,8 @@ export function TreemapDemo({
 
 const MapNode = memo(
     ({ node, i }: { node: HierarchyRectangularNode<any>; i: number }) => {
-        const {
-            justClickedNodeId,
-            fontScale,
-            layers,
-            setJustClickedNodeId,
-            colorScale,
-            deletedColorScale,
-        } = useContext(context)
+        const { fontScale, layers, colorScale, deletedColorScale } =
+            useContext(context)
         const nodeWidth = node.x1 - node.x0
         const nodeHeight = node.y1 - node.y0
         const min = 2
@@ -201,25 +158,16 @@ const MapNode = memo(
             (e) => {
                 e.stopPropagation()
 
-                flushSync(() => {
-                    setJustClickedNodeId(node.data.id)
-                })
-
-                startViewTransition(() => {
-                    flushSync(() => {
-                        router.push(
-                            {
-                                query: {
-                                    ...router.query,
-                                    node: node.data.id,
-                                },
-                            },
-                            undefined,
-                            { shallow: true },
-                        )
-                        // setZoomedNode(node.copy())
-                    })
-                })
+                router.push(
+                    {
+                        query: {
+                            ...router.query,
+                            node: node.data.id,
+                        },
+                    },
+                    undefined,
+                    { shallow: true },
+                )
             },
             [node, router.query],
         )
@@ -270,10 +218,8 @@ const MapNode = memo(
                     position: 'absolute',
                     top: node.y0 + margin.top,
                     left: node.x0 + margin.left,
-                    viewTransitionName: contains(justClickedNodeId, node)
-                        ? `node-${node.data.id}`
-                        : undefined,
                 }}
+                // layout
                 className='cursor-pointer'
                 onClick={onClick}
             >
