@@ -2,14 +2,10 @@
 import ClipLoader from 'react-spinners/BarLoader'
 
 import { hierarchy } from 'd3-hierarchy'
-// install (please try to align the version of installed @nivo packages)
-// yarn add @nivo/treemap
+
 import { useRouter } from 'next/router'
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import { flushSync } from 'react-dom'
-import useSWR from 'swr'
-import { Chart } from 'website/src/chart'
-import { startViewTransition, useElemSize } from 'website/src/hooks'
+import { useElemSize } from 'website/src/hooks'
 import { TreemapDemo } from 'website/src/visx'
 
 async function analyzeImage({ image, port }) {
