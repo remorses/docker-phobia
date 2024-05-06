@@ -15,7 +15,7 @@ You can install docker-phobia with:
 curl -sf https://goblin.run/github.com/remorses/docker-phobia | sh
 # goblin.run will build the binary and place it in PATH
 # if you have go installed you can also do
-go install github.com/remorses/docker-phobia
+go install github.com/remorses/docker-phobia@latest
 ```
 
 ## Usage

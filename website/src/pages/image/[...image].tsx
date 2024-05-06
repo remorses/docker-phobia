@@ -13,7 +13,7 @@ import { startViewTransition, useElemSize } from 'website/src/hooks'
 import { TreemapDemo } from 'website/src/visx'
 
 async function analyzeImage({ image, port }) {
-    const baseUrl = new URL('http://127.0.0.1:' + port)
+    const baseUrl = new URL('http://localhost:' + port)
 
     const u = new URL('/analyze/' + encodeURIComponent(image), baseUrl)
 
