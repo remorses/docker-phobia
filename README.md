@@ -45,8 +45,8 @@ Execute docker-phobia to initiate a Go script that leverages [dive](https://gith
 
 ## Roadmap
 
--   [ ] Show the size for each rect on hover as tooltip
--   [ ] Use better domain
+-   [x] Show the size for each rect on hover as tooltip
+-   [x] Use better domain
 -   [ ] Use tags to version the cli
 -   [ ] Add share button to share the treemap with anyone without installing again, use the image SHA in the url.
 -   [ ] Automatically store public images (images from DockerHub with SHA already published) in a docker-phobia directory indexed on Google. People can see images size between versions and tags.

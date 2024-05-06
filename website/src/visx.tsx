@@ -1,4 +1,5 @@
 'use client'
+
 import Tippy from '@tippyjs/react/headless'
 
 import { colord } from 'colord'
@@ -17,6 +18,7 @@ import {
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { scheme, schemeRed } from 'website/src/colors'
+import { formatFileSize } from 'website/src/utils'
 
 const background = '#114b5f'
 
@@ -250,12 +252,15 @@ const MapNode = memo(
                                         <div className='truncate'>
                                             layer: {layer?.command}
                                         </div>
+                                        <div className='truncate'>
+                                            size: {formatFileSize(node.value)}
+                                        </div>
                                     </div>
                                 )
                             }}
                         >
                             <div
-                                className='text-black truncate '
+                                className='text-black truncate w-fit '
                                 style={{
                                     maxWidth: nodeWidth - 4,
                                     maxHeight: nodeHeight - 4,

@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { useElemSize } from 'website/src/hooks'
 import { TreemapDemo } from 'website/src/visx'
+import { formatFileSize } from 'website/src/utils'
 
 async function analyzeImage({ image, port }) {
     const baseUrl = new URL('http://localhost:' + port)
@@ -136,19 +137,6 @@ export default function Home({}) {
             </div>
         </Suspense>
     )
-}
-
-function formatFileSize(bytes) {
-    console.log('bytes', bytes)
-    if (bytes < 1024) {
-        return bytes + ' bytes'
-    } else if (bytes < 1024 * 1024) {
-        return (bytes / 1024).toFixed(2) + ' KB'
-    } else if (bytes < 1024 * 1024 * 1024) {
-        return (bytes / 1024 / 1024).toFixed(2) + ' MB'
-    } else {
-        return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB'
-    }
 }
 
 function PassComponentSize({ children, ...rest }) {
