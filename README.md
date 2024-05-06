@@ -42,3 +42,11 @@ The different colors represent the different layers in the image. If two rectang
 ## How it works
 
 Execute docker-phobia to initiate a Go script that leverages [dive](https://github.com/wagoodman/dive) internal API for Docker image retrieval and analysis, outputting a JSON file structure with file sizes. Concurrently, it spins up a server on port 8080 and launches docker-phobia.vercel.app, which visualizes the JSON data as a treemap.
+
+## Roadmap
+
+-   [ ] Show the size for each rect on hover as tooltip
+-   [ ] Use better domain
+-   [ ] Use tags to version the cli
+-   [ ] Add share button to share the treemap with anyone without installing again, use the image SHA in the url.
+-   [ ] Automatically store public images (images from DockerHub with SHA already published) in a docker-phobia directory indexed on Google. People can see images size between versions and tags.
