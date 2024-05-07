@@ -3,7 +3,7 @@ import { installGlobals } from '@remix-run/node'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import Inspect from 'vite-plugin-inspect'
-
+import { cjsInterop } from 'vite-plugin-cjs-interop'
 
 const building = process.env.NODE_ENV === 'production'
 
@@ -25,6 +25,7 @@ export default defineConfig({
     plugins: [
         // nodeLoaderPlugin(),
         // commonjs(),
+        cjsInterop({ dependencies: ['react-spinners/BarLoader'] }),
         Inspect(),
         remix({ appDirectory: 'src' }),
         tsconfigPaths(),

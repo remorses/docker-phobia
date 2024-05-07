@@ -107,6 +107,9 @@ importers:
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
+      vite-plugin-cjs-interop:
+        specifier: ^2.1.0
+        version: 2.1.0
       vite-plugin-commonjs:
         specifier: ^0.10.1
         version: 0.10.1
@@ -4680,6 +4683,9 @@ packages:
     resolution: {integrity: sha512-VZDAseqjrHgNd4Kh8icYHWzTKSCZMhia7GyHfhtzLW33fZlG9SwsB6CEhgyVOWkJfJ2pFLrp/Gj1FSfAiqH9Lw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
+
+  vite-plugin-cjs-interop@2.1.0:
+    resolution: {integrity: sha512-qp+54VPRKiiuqKZ4tToiEZz5d5uiZf33PrXOfyH5SInlVsYz4b6YoZMNxCrx+vKdAQVsZu03vDJK71Ri5oKMqg==}
 
   vite-plugin-commonjs@0.10.1:
     resolution: {integrity: sha512-taP8R9kYGlCW5OzkVR0UIWRCnG6rSxeWWuA7tnU5b9t5MniibOnDY219NhisTeDhJAeGT8cEnrhVWZ9A5yD+vg==}
@@ -10086,6 +10092,14 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-plugin-cjs-interop@2.1.0:
+    dependencies:
+      acorn: 8.11.3
+      acorn-import-assertions: 1.9.0(acorn@8.11.3)
+      estree-walker: 3.0.3
+      magic-string: 0.30.8
+      minimatch: 9.0.4
 
   vite-plugin-commonjs@0.10.1:
     dependencies:
