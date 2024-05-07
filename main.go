@@ -212,7 +212,15 @@ func analyzeImage(userImage string) (*JsonOutput, error) {
 	sourceStr := "docker"
 	value, ok := currentlyAnalyzing.Get(userImage)
 	if ok && value {
-		return nil, errors.New("image " + userImage + " is currently being analyzed")
+
+		// wait until the image is done being analyzed
+		for {
+			value, ok := currentlyAnalyzing.Get(userImage)
+			if !ok || !value {
+				break
+			}
+			time.Sleep(1 * time.Second)
+		}
 	}
 	currentlyAnalyzing.Set(userImage, true)
 	defer func() {

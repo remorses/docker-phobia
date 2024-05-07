@@ -1,6 +1,7 @@
-'skip ssr'
+
 import { BarLoader } from 'react-spinners'
 // import BarLoader from 'react-spinners/BarLoader'
+// console.log('BarLoader', BarLoader)
 
 import { hierarchy } from 'd3-hierarchy'
 
