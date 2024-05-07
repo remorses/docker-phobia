@@ -4,7 +4,8 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import Inspect from 'vite-plugin-inspect'
 
-import { nodeLoaderPlugin } from '@vavite/node-loader/plugin'
+
+const building = process.env.NODE_ENV === 'production'
 
 export default defineConfig({
     ssr: {
@@ -13,13 +14,17 @@ export default defineConfig({
         //     needsInterop: ['react-spinners'],
         // },
 
-        noExternal: [/react-spinners/],
+        noExternal: building || undefined,
     },
     experimental: {
         // skipSsrTransform: true,
     },
+    legacy: {
+        proxySsrExternalModules: true,
+    },
     plugins: [
         // nodeLoaderPlugin(),
+        // commonjs(),
         Inspect(),
         remix({ appDirectory: 'src' }),
         tsconfigPaths(),

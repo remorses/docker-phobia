@@ -1,6 +1,6 @@
 
-import { BarLoader } from 'react-spinners'
-// import BarLoader from 'react-spinners/BarLoader'
+// import { BarLoader } from 'react-spinners'
+import BarLoader from 'react-spinners/BarLoader'
 // console.log('BarLoader', BarLoader)
 
 import { hierarchy } from 'd3-hierarchy'
@@ -43,7 +43,7 @@ interface ImageNode {
 
 export default function Home({}) {
     const params = useParams()
-    console.log('params', params)
+    // console.log('params', params)
     const [searchParams] = useSearchParams()
     const imageStr = params['*'] as string
     const port = (searchParams.get('port') as string) || '8080'

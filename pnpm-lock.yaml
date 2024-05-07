@@ -107,6 +107,9 @@ importers:
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
+      vite-plugin-commonjs:
+        specifier: ^0.10.1
+        version: 0.10.1
       vite-plugin-inspect:
         specifier: ^0.8.4
         version: 0.8.4(rollup@4.17.2)(vite@5.2.11(@types/node@20.12.10)(terser@5.31.0))
@@ -4677,6 +4680,12 @@ packages:
     resolution: {integrity: sha512-VZDAseqjrHgNd4Kh8icYHWzTKSCZMhia7GyHfhtzLW33fZlG9SwsB6CEhgyVOWkJfJ2pFLrp/Gj1FSfAiqH9Lw==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
+
+  vite-plugin-commonjs@0.10.1:
+    resolution: {integrity: sha512-taP8R9kYGlCW5OzkVR0UIWRCnG6rSxeWWuA7tnU5b9t5MniibOnDY219NhisTeDhJAeGT8cEnrhVWZ9A5yD+vg==}
+
+  vite-plugin-dynamic-import@1.5.0:
+    resolution: {integrity: sha512-Qp85c+AVJmLa8MLni74U4BDiWpUeFNx7NJqbGZyR2XJOU7mgW0cb7nwlAMucFyM4arEd92Nfxp4j44xPi6Fu7g==}
 
   vite-plugin-inspect@0.8.4:
     resolution: {integrity: sha512-G0N3rjfw+AiiwnGw50KlObIHYWfulVwaCBUBLh2xTW9G1eM9ocE5olXkEYUbwyTmX+azM8duubi+9w5awdCz+g==}
@@ -10077,6 +10086,20 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-plugin-commonjs@0.10.1:
+    dependencies:
+      acorn: 8.11.3
+      fast-glob: 3.3.2
+      magic-string: 0.30.8
+      vite-plugin-dynamic-import: 1.5.0
+
+  vite-plugin-dynamic-import@1.5.0:
+    dependencies:
+      acorn: 8.11.3
+      es-module-lexer: 1.5.2
+      fast-glob: 3.3.2
+      magic-string: 0.30.8
 
   vite-plugin-inspect@0.8.4(rollup@4.17.2)(vite@5.2.11(@types/node@20.12.10)(terser@5.31.0)):
     dependencies:
