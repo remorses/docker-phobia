@@ -1,15 +1,18 @@
 {
     "name": "website",
-    "version": "0.1.0",
     "private": true,
+    "sideEffects": false,
+    "type": "module",
     "scripts": {
-        "dev": "NODE_ENV=development next dev -p 9696",
-        "build": "next build",
-        "start": "next start -p 9696",
-        "lint": "next lint"
+        "build": "remix vite:build",
+        "dev": "remix vite:dev -p 9696",
+        "start": "remix-serve ./build/server/index.js -p 9696",
+        "typecheck": "tsc"
     },
     "dependencies": {
-        "@babel/plugin-syntax-jsx": "^7.24.1",
+        "@remix-run/node": "^2.9.1",
+        "@remix-run/react": "^2.9.1",
+        "@remix-run/serve": "^2.9.1",
         "@tippyjs/react": "^4.2.6",
         "@types/d3": "^7.4.3",
         "@types/d3-hierarchy": "^3.1.7",
@@ -25,9 +28,9 @@
         "d3": "^7.9.0",
         "d3-hierarchy": "^3.1.2",
         "d3-scale-chromatic": "^3.1.0",
-        "elacca": "^0.5.3",
+        "elacca": "^0.5.4",
         "framer-motion": "^11.1.7",
-        "next": "14.2.3",
+        "isbot": "^4.1.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-spinners": "^0.13.8",
@@ -35,12 +38,18 @@
         "tippy.js": "^6.3.7"
     },
     "devDependencies": {
-        "@types/node": "^20",
-        "@types/react": "^18.3.0",
-        "@types/react-dom": "^18",
+        "@remix-run/dev": "^2.9.1",
+        "@types/react": "^18.2.20",
+        "@types/react-dom": "^18.2.7",
+        "@typescript-eslint/eslint-plugin": "^6.7.4",
+        "@typescript-eslint/parser": "^6.7.4",
         "autoprefixer": "^10.0.1",
         "postcss": "^8",
         "tailwindcss": "^3.3.0",
-        "typescript": "^5"
+        "vite": "^5.2.11",
+        "vite-tsconfig-paths": "^4.2.1"
+    },
+    "engines": {
+        "node": ">=18.0.0"
     }
 }

@@ -15,12 +15,10 @@ import {
     treemap as d3treemap,
 } from 'd3-hierarchy'
 
-import { useRouter } from 'next/router'
+import { useSearchParams } from '@remix-run/react'
 import { useMemo, useState } from 'react'
-import { scheme, schemeRed } from 'website/src/colors'
-import { formatFileSize } from 'website/src/utils'
-
-const background = '#114b5f'
+import { scheme, schemeRed } from 'website/src/lib/colors'
+import { formatFileSize } from 'website/src/lib/utils'
 
 const margin = { top: 0, left: 0, right: 0, bottom: 0 }
 
@@ -55,7 +53,7 @@ export function TreemapDemo({
 }) {
     const xMax = width - margin.left - margin.right
     const yMax = height - margin.top - margin.bottom
-    const router = useRouter()
+    const [searchParams, setSearchParams] = useSearchParams()
     const [zoomedNode, setZoomedNode] = useState(node)
 
     const fontScale = useMemo(() => {
@@ -66,11 +64,11 @@ export function TreemapDemo({
     }, [node])
 
     useEffect(() => {
-        if (!router.query.node) {
+        if (!searchParams.get('node')) {
             setZoomedNode(node)
             return
         }
-        const nodeId = Number(router.query.node)
+        const nodeId = Number(searchParams.get('node'))
         if (!nodeId) {
             return
         }
@@ -79,7 +77,7 @@ export function TreemapDemo({
             return
         }
         setZoomedNode(found.copy())
-    }, [node, router.query.node])
+    }, [node, searchParams.get('node')])
 
     const treemapElem = useMemo(() => {
         const treemap = d3treemap<any>()
@@ -155,23 +153,16 @@ const MapNode = memo(
         const nodeWidth = node.x1 - node.x0
         const nodeHeight = node.y1 - node.y0
         const min = 2
-        const router = useRouter()
+        const [searchParams, setSearchParams] = useSearchParams()
         const onClick = useCallback(
             (e) => {
                 e.stopPropagation()
-
-                router.push(
-                    {
-                        query: {
-                            ...router.query,
-                            node: node.data.id,
-                        },
-                    },
-                    undefined,
-                    { shallow: true },
-                )
+                setSearchParams((prev) => {
+                    prev.set('node', node.data.id)
+                    return prev
+                }, {})
             },
-            [node, router.query],
+            [node],
         )
 
         // if (nodeWidth < 1 || nodeHeight <div 1) {

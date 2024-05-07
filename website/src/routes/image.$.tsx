@@ -1,13 +1,14 @@
 'skip ssr'
-import ClipLoader from 'react-spinners/BarLoader'
+import { BarLoader } from 'react-spinners'
+// import BarLoader from 'react-spinners/BarLoader'
 
 import { hierarchy } from 'd3-hierarchy'
 
-import { useRouter } from 'next/router'
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
-import { useElemSize } from 'website/src/hooks'
-import { TreemapDemo } from 'website/src/visx'
-import { formatFileSize } from 'website/src/utils'
+import { useElemSize } from 'website/src/lib/hooks'
+import { TreemapDemo } from 'website/src/lib/visx'
+import { formatFileSize } from 'website/src/lib/utils'
+import { useNavigate, useParams, useSearchParams } from '@remix-run/react'
 
 async function analyzeImage({ image, port }) {
     const baseUrl = new URL('http://localhost:' + port)
@@ -40,10 +41,12 @@ interface ImageNode {
 }
 
 export default function Home({}) {
-    const router = useRouter()
-    const image = router.query.image as string[]
-    const port = (router.query.port as string) || '8080'
-    let imageStr = image?.map((x) => decodeURIComponent(x)).join('/')
+    const params = useParams()
+    console.log('params', params)
+    const [searchParams] = useSearchParams()
+    const imageStr = params['*'] as string
+    const port = (searchParams.get('port') as string) || '8080'
+
     const [error, setError] = useState<string>()
     const [data, setData] = useState<any>()
     useEffect(() => {
@@ -60,7 +63,7 @@ export default function Home({}) {
         }
         get().catch((e) => setError(e.message))
     }, [port, imageStr])
-
+    const navigate = useNavigate()
     const { tree, layers } = data || {}
 
     const node = useMemo(() => {
@@ -82,15 +85,16 @@ export default function Home({}) {
     if (error) {
         return (
             <div className='flex text-red-300 h-full grow items-center justify-center flex-col gap-6 w-full'>
-                <div>{error}</div>
+                <div>{String(error)}</div>
             </div>
         )
     }
-    if (!data || !image || !node) {
+
+    if (!data || !imageStr || !node) {
         return (
             <div className='flex h-full grow items-center justify-center flex-col gap-12 w-full'>
                 <div>Loading Image</div>
-                <ClipLoader width={140} color='#fff' />
+                <BarLoader width={140} color='#fff' />
             </div>
         )
     }
@@ -106,12 +110,12 @@ export default function Home({}) {
                     {
                         <button
                             style={
-                                !!router.query.node
+                                !!searchParams.get('node')
                                     ? {}
                                     : { opacity: 0, pointerEvents: 'none' }
                             }
                             onClick={() => {
-                                router.back()
+                                navigate(-1)
                                 // startViewTransition(() => {
                                 //     flushSync(() => {
                                 //         router.back()

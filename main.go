@@ -3,8 +3,12 @@ package main
 import (
 	"bytes"
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net"
+	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -15,20 +19,14 @@ import (
 	"syscall"
 	"time"
 
-	"net/url"
-
-	"encoding/json"
-	"fmt"
-	"net/http"
-
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/client"
-	"github.com/manifoldco/promptui"
-	"github.com/urfave/cli/v2"
-
 	"github.com/gorilla/mux"
+	"github.com/manifoldco/promptui"
+	cmap "github.com/orcaman/concurrent-map/v2"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli/v2"
 	"github.com/wagoodman/dive/dive"
 	"github.com/wagoodman/dive/dive/filetree"
 	"github.com/wagoodman/dive/dive/image"
@@ -207,17 +205,18 @@ func imageAnalyzerHandler(w http.ResponseWriter, r *http.Request) {
 
 var imgCache = make(map[string]*image.Image)
 
-var currentlyAnalyzing = make(map[string]bool)
+var currentlyAnalyzing = cmap.New[bool]()
 
 func analyzeImage(userImage string) (*JsonOutput, error) {
 	// Get the "image" parameter from the URL path
 	sourceStr := "docker"
-	if currentlyAnalyzing[userImage] {
+	value, ok := currentlyAnalyzing.Get(userImage)
+	if ok && value {
 		return nil, errors.New("image " + userImage + " is currently being analyzed")
 	}
-	currentlyAnalyzing[userImage] = true
+	currentlyAnalyzing.Set(userImage, true)
 	defer func() {
-		delete(currentlyAnalyzing, userImage)
+		currentlyAnalyzing.Remove(userImage)
 	}()
 
 	sourceType, imageStr := dive.DeriveImageSource(userImage)
