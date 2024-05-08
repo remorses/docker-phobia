@@ -28,6 +28,7 @@
         "d3": "^7.9.0",
         "d3-hierarchy": "^3.1.2",
         "d3-scale-chromatic": "^3.1.0",
+        "dockside": "^0.0.2",
         "elacca": "^0.5.4",
         "framer-motion": "^11.1.7",
         "isbot": "^4.4.0",
