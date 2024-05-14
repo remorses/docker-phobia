@@ -135,8 +135,12 @@ func serveWebsite(imageStr string) {
 		baseURL = "https://docker-phobia.vercel.app"
 	}
 	path := "/image/" + imageStr + "?port=" + strconv.Itoa(port)
+	println("opening the browser at", baseURL+path)
 	err = openBrowser(baseURL + path)
-	println("open your browser at", baseURL+path)
+	if err != nil {
+		// print the error but continue
+		logrus.Error(err)
+	}
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
