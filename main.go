@@ -136,9 +136,7 @@ func serveWebsite(imageStr string) {
 	}
 	path := "/image/" + imageStr + "?port=" + strconv.Itoa(port)
 	err = openBrowser(baseURL + path)
-	if err != nil {
-		log.Fatal(err)
-	}
+	println("open your browser at", baseURL+path)
 
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
