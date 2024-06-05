@@ -13,11 +13,9 @@ test('docker manifest', async () => {
 test('docker manifest', async () => {
     const manifest = await client.getManifest('debian:bullseye', 'linux/amd64')
     console.log(manifest)
-    const blob = await client.getBlob(
-        'debian:bullseye',
-        manifest.config.digest,
-    )
-    const text = await blob.text()
     expect(manifest).toBeDefined()
-    console.log(text)
+    const blob = await client.getBlob('debian', manifest.layers[0].digest)
+    console.log(Object.fromEntries(blob.headers.entries()))
+    // const text = await blob.text()
+    // console.log(text)
 })
