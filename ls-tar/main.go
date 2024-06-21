@@ -3,6 +3,7 @@ package main
 import (
 	"archive/tar"
 	"compress/gzip"
+	"context"
 	"flag"
 	"fmt"
 	"io"
@@ -58,7 +59,7 @@ func getRequest() http.Request {
 func getAuthToken() string {
 	// ctx := context.Background()
 	imageName := "debian:bullseye"
-
+	ctx := context.Background()
 	// Parse the image name
 	ref, err := name.ParseReference(imageName)
 	if err != nil {
@@ -66,7 +67,7 @@ func getAuthToken() string {
 	}
 	auth, err := authn.DefaultKeychain.Resolve(ref.Context().Registry)
 	// Create a transport that includes authentication
-	t, err := transport.New(ref.Context().Registry, auth, http.DefaultTransport, []string{ref.Scope(transport.PullScope)})
+	t, err := transport.NewWithContext(ctx, ref.Context().Registry, auth, http.DefaultTransport, []string{ref.Scope(transport.PullScope)})
 	if err != nil {
 		log.Fatalf("Error creating transport: %v", err)
 	}
