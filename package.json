@@ -10,6 +10,7 @@
     },
     "devDependencies": {
         "@changesets/cli": "^2.27.1",
+        "@xmorse/deployment-utils": "^0.1.10",
         "prettier": "^3.2.5",
         "tsx": "^4.7.1",
         "typescript": "^5.4.3",
