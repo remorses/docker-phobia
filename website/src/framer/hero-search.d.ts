@@ -10,7 +10,8 @@ export interface Props {
     width?: any
     height?: any
     layoutId?: string
-
+    "buttonVariant"?: 'Default' | 'Loading' | 'Disabled' | 'Success' | 'Error'
+    "inputName"?: string
 }
 
 const HeroSearchFramerComponent = (props: Props) => any

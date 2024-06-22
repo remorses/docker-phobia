@@ -110,8 +110,8 @@
       ],
       "format": "esm"
     },
-    "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js": {
-      "bytes": 10012,
+    "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/qsf0xVdboemP9RZWygQK/rf_ckdRey.js": {
+      "bytes": 11305,
       "imports": [
         {
           "path": "react/jsx-runtime",
@@ -160,9 +160,9 @@
       "bytes": 536,
       "imports": [
         {
-          "path": "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js",
+          "path": "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/qsf0xVdboemP9RZWygQK/rf_ckdRey.js",
           "kind": "import-statement",
-          "original": "https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js"
+          "original": "https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/qsf0xVdboemP9RZWygQK/rf_ckdRey.js"
         },
         {
           "path": "unframer",
@@ -872,8 +872,8 @@
       ],
       "entryPoint": "virtual:hero-search",
       "inputs": {
-        "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js": {
-          "bytesInOutput": 9215
+        "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/qsf0xVdboemP9RZWygQK/rf_ckdRey.js": {
+          "bytesInOutput": 10471
         },
         "https :https://framerusercontent.com/modules/r4MwdB6MjpAiDn8TjVd2/yJhbXfEJ051y0IjvULuo/YXTleVdfY.js": {
           "bytesInOutput": 11891
@@ -882,7 +882,7 @@
           "bytesInOutput": 271
         }
       },
-      "bytes": 21772
+      "bytes": 23028
     },
     "nav.js": {
       "imports": [

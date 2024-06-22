@@ -1,14 +1,17 @@
 /* eslint-disable */
 'use client';
 
-// https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js
+// https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/qsf0xVdboemP9RZWygQK/rf_ckdRey.js
 import { jsx as _jsx2, jsxs as _jsxs2, } from 'react/jsx-runtime';
 import {
   addFonts as addFonts2,
+  addPropertyControls as addPropertyControls2,
   ComponentViewportProvider,
+  ControlType as ControlType2,
   cx as cx2,
   FormPlainTextInput,
   getFonts,
+  getPropertyControls,
   RichText as RichText2,
   useComponentViewport as useComponentViewport2,
   useLocaleInfo as useLocaleInfo2,
@@ -351,11 +354,12 @@ addFonts(FramerYXTleVdfY, [{
   },],
 },], { supportsExplicitInterCodegen: true, },);
 
-// https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js
+// https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/qsf0xVdboemP9RZWygQK/rf_ckdRey.js
 var RichTextWithFX = withFX2(RichText2,);
 var SearcjButtonFonts = getFonts(stdin_default,);
+var SearcjButtonControls = getPropertyControls(stdin_default,);
 var cycleOrder2 = ['GpM_z4mCM',];
-var serializationHash2 = 'framer-RxRq6';
+var serializationHash2 = 'framer-xlqP6';
 var variantClassNames2 = { GpM_z4mCM: 'framer-v-6ne45o', };
 var transition12 = { damping: 60, delay: 0, mass: 1, stiffness: 500, type: 'spring', };
 var animation2 = { opacity: 0, rotate: 0, rotateX: 0, rotateY: 0, scale: 1, skewX: 0, skewY: 0, transformPerspective: 1200, x: 0, y: 50, };
@@ -367,8 +371,26 @@ var Transition2 = ({ value, children, },) => {
   return /* @__PURE__ */ _jsx2(MotionConfigContext2.Provider, { value: contextValue, children, },);
 };
 var Variants2 = motion2(React2.Fragment,);
-var getProps2 = ({ height, id, width, ...props },) => {
-  return { ...props, };
+var humanReadableEnumMap = { Default: 'xASwwcC8_', Disabled: 'HMp24BznT', Error: 'LEWQGtjcU', Loading: 'KaFG3iKrP', Success: 'bq8ZBkbLB', };
+var getProps2 = ({ buttonVariant, height, id, inputName, width, ...props },) => {
+  var _humanReadableEnumMap_buttonVariant, _ref, _ref1, _ref2;
+  return {
+    ...props,
+    Ajx_ozbd_:
+      (_ref1 =
+            (_ref =
+                  (_humanReadableEnumMap_buttonVariant = humanReadableEnumMap[buttonVariant]) !== null &&
+                    _humanReadableEnumMap_buttonVariant !== void 0
+                    ? _humanReadableEnumMap_buttonVariant
+                    : buttonVariant) !== null && _ref !== void 0
+              ? _ref
+              : props.Ajx_ozbd_) !== null && _ref1 !== void 0
+        ? _ref1
+        : 'xASwwcC8_',
+    uqITKsbj7: (_ref2 = inputName !== null && inputName !== void 0 ? inputName : props.uqITKsbj7) !== null && _ref2 !== void 0
+      ? _ref2
+      : 'query',
+  };
 };
 var createLayoutDependency2 = (props, variants,) => {
   if (props.layoutDependency) return variants.join('-',) + props.layoutDependency;
@@ -376,7 +398,7 @@ var createLayoutDependency2 = (props, variants,) => {
 };
 var Component2 = /* @__PURE__ */ React2.forwardRef(function (props, ref,) {
   const { activeLocale, setLocale, } = useLocaleInfo2();
-  const { style, className, layoutId, variant, ...restProps } = getProps2(props,);
+  const { style, className, layoutId, variant, Ajx_ozbd_, uqITKsbj7, ...restProps } = getProps2(props,);
   const { baseVariant, classNames, gestureHandlers, gestureVariant, setGestureState, setVariant, variants, } = useVariantState2({
     cycleOrder: cycleOrder2,
     defaultVariant: 'GpM_z4mCM',
@@ -456,7 +478,7 @@ var Component2 = /* @__PURE__ */ React2.forwardRef(function (props, ref,) {
               children: [
                 /* @__PURE__ */ _jsx2(FormPlainTextInput, {
                   className: 'framer-1p05n8y',
-                  inputName: 'Name',
+                  inputName: uqITKsbj7,
                   layoutDependency,
                   layoutId: 'TPsklV0gi',
                   placeholder: 'postgres:latest',
@@ -489,7 +511,7 @@ var Component2 = /* @__PURE__ */ React2.forwardRef(function (props, ref,) {
                       id: 'w22SR3RZu',
                       layoutId: 'w22SR3RZu',
                       style: { height: '100%', width: '100%', },
-                      variant: 'xASwwcC8_',
+                      variant: Ajx_ozbd_,
                       width: '100%',
                     },),
                   },),
@@ -504,19 +526,24 @@ var Component2 = /* @__PURE__ */ React2.forwardRef(function (props, ref,) {
 },);
 var css2 = [
   '@supports (aspect-ratio: 1) { body { --framer-aspect-ratio-supported: auto; } }',
-  '.framer-RxRq6.framer-uy5xhb, .framer-RxRq6 .framer-uy5xhb { display: block; }',
-  '.framer-RxRq6.framer-6ne45o { align-content: center; align-items: center; display: flex; flex-direction: column; flex-wrap: nowrap; gap: 30px; height: min-content; justify-content: center; overflow: hidden; padding: 100px 0px 100px 0px; position: relative; width: 1140px; }',
-  '.framer-RxRq6 .framer-10y1fef { align-content: center; align-items: center; display: flex; flex: none; flex-direction: column; flex-wrap: nowrap; gap: 10px; height: min-content; justify-content: center; overflow: hidden; padding: 0px; position: relative; width: min-content; }',
-  '.framer-RxRq6 .framer-olsjb5 { flex: none; height: auto; position: relative; white-space: pre-wrap; width: 482px; word-break: break-word; word-wrap: break-word; }',
-  '.framer-RxRq6 .framer-jn3t82 { align-content: center; align-items: center; display: flex; flex: none; flex-direction: row; flex-wrap: nowrap; gap: 10px; height: min-content; justify-content: center; max-width: 500px; overflow: hidden; padding: 0px; position: relative; width: 100%; }',
-  '.framer-RxRq6 .framer-1p05n8y { --framer-input-focused-border-color: #0099ff; --framer-input-focused-border-style: solid; --framer-input-focused-border-width: 1px; --framer-input-font-family: "Inter"; --framer-input-font-letter-spacing: 0em; --framer-input-font-line-height: 1.2em; --framer-input-font-size: 14px; --framer-input-font-weight: 400px; --framer-input-padding: 12px; flex: 1 0 0px; height: 40px; position: relative; width: 1px; }',
-  '.framer-RxRq6 .framer-1nvuryu-container { flex: none; height: 40px; position: relative; width: 111px; }',
-  '@supports (background: -webkit-named-image(i)) and (not (font-palette:dark)) { .framer-RxRq6.framer-6ne45o, .framer-RxRq6 .framer-10y1fef, .framer-RxRq6 .framer-jn3t82 { gap: 0px; } .framer-RxRq6.framer-6ne45o > * { margin: 0px; margin-bottom: calc(30px / 2); margin-top: calc(30px / 2); } .framer-RxRq6.framer-6ne45o > :first-child, .framer-RxRq6 .framer-10y1fef > :first-child { margin-top: 0px; } .framer-RxRq6.framer-6ne45o > :last-child, .framer-RxRq6 .framer-10y1fef > :last-child { margin-bottom: 0px; } .framer-RxRq6 .framer-10y1fef > * { margin: 0px; margin-bottom: calc(10px / 2); margin-top: calc(10px / 2); } .framer-RxRq6 .framer-jn3t82 > * { margin: 0px; margin-left: calc(10px / 2); margin-right: calc(10px / 2); } .framer-RxRq6 .framer-jn3t82 > :first-child { margin-left: 0px; } .framer-RxRq6 .framer-jn3t82 > :last-child { margin-right: 0px; } }',
+  '.framer-xlqP6.framer-uy5xhb, .framer-xlqP6 .framer-uy5xhb { display: block; }',
+  '.framer-xlqP6.framer-6ne45o { align-content: center; align-items: center; display: flex; flex-direction: column; flex-wrap: nowrap; gap: 30px; height: min-content; justify-content: center; overflow: hidden; padding: 100px 0px 100px 0px; position: relative; width: 1140px; }',
+  '.framer-xlqP6 .framer-10y1fef { align-content: center; align-items: center; display: flex; flex: none; flex-direction: column; flex-wrap: nowrap; gap: 10px; height: min-content; justify-content: center; overflow: hidden; padding: 0px; position: relative; width: min-content; }',
+  '.framer-xlqP6 .framer-olsjb5 { flex: none; height: auto; position: relative; white-space: pre-wrap; width: 482px; word-break: break-word; word-wrap: break-word; }',
+  '.framer-xlqP6 .framer-jn3t82 { align-content: center; align-items: center; display: flex; flex: none; flex-direction: row; flex-wrap: nowrap; gap: 10px; height: min-content; justify-content: center; max-width: 500px; overflow: hidden; padding: 0px; position: relative; width: 100%; }',
+  '.framer-xlqP6 .framer-1p05n8y { --framer-input-focused-border-color: #0099ff; --framer-input-focused-border-style: solid; --framer-input-focused-border-width: 1px; --framer-input-font-family: "Inter"; --framer-input-font-letter-spacing: 0em; --framer-input-font-line-height: 1.2em; --framer-input-font-size: 14px; --framer-input-font-weight: 400px; --framer-input-padding: 12px; flex: 1 0 0px; height: 40px; position: relative; width: 1px; }',
+  '.framer-xlqP6 .framer-1nvuryu-container { flex: none; height: 40px; position: relative; width: 111px; }',
+  '@supports (background: -webkit-named-image(i)) and (not (font-palette:dark)) { .framer-xlqP6.framer-6ne45o, .framer-xlqP6 .framer-10y1fef, .framer-xlqP6 .framer-jn3t82 { gap: 0px; } .framer-xlqP6.framer-6ne45o > * { margin: 0px; margin-bottom: calc(30px / 2); margin-top: calc(30px / 2); } .framer-xlqP6.framer-6ne45o > :first-child, .framer-xlqP6 .framer-10y1fef > :first-child { margin-top: 0px; } .framer-xlqP6.framer-6ne45o > :last-child, .framer-xlqP6 .framer-10y1fef > :last-child { margin-bottom: 0px; } .framer-xlqP6 .framer-10y1fef > * { margin: 0px; margin-bottom: calc(10px / 2); margin-top: calc(10px / 2); } .framer-xlqP6 .framer-jn3t82 > * { margin: 0px; margin-left: calc(10px / 2); margin-right: calc(10px / 2); } .framer-xlqP6 .framer-jn3t82 > :first-child { margin-left: 0px; } .framer-xlqP6 .framer-jn3t82 > :last-child { margin-right: 0px; } }',
 ];
-var Framerrf_ckdRey = withCSS2(Component2, css2, 'framer-RxRq6',);
+var Framerrf_ckdRey = withCSS2(Component2, css2, 'framer-xlqP6',);
 var stdin_default2 = Framerrf_ckdRey;
 Framerrf_ckdRey.displayName = 'HeroAndSearch';
 Framerrf_ckdRey.defaultProps = { height: 357, width: 1140, };
+addPropertyControls2(Framerrf_ckdRey, {
+  Ajx_ozbd_: (SearcjButtonControls === null || SearcjButtonControls === void 0 ? void 0 : SearcjButtonControls['variant']) &&
+    { ...SearcjButtonControls['variant'], defaultValue: 'xASwwcC8_', description: void 0, hidden: void 0, title: 'buttonVariant', },
+  uqITKsbj7: { defaultValue: 'query', title: 'inputName', type: ControlType2.String, },
+},);
 addFonts2(Framerrf_ckdRey, [{
   explicitInter: true,
   fonts: [{

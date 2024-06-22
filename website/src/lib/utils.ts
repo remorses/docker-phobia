@@ -10,3 +10,7 @@ export function formatFileSize(bytes) {
         return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB'
     }
 }
+
+export function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+}
