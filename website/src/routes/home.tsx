@@ -28,7 +28,7 @@ export default function Index() {
         <div className='flex flex-col grow min-h-full gap-[100px]  items-center'>
             <NavFramerComponent.Responsive
                 variants={{ base: 'Mobile', md: 'Tablet', lg: 'Desktop' }}
-                // className='!w-full'
+                className=''
             />
             <Form method='POST' className='contents'>
                 <HeroSearchFramerComponent
