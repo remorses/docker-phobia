@@ -1,4 +1,6 @@
 import './globals.css'
+import './framer/styles.css'
+import './framer/tokens.css'
 import {
     Links,
     Meta,
@@ -9,7 +11,7 @@ import {
 
 export function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang='en'>
+        <html className='' lang='en'>
             <head>
                 <meta charSet='utf-8' />
                 <meta
@@ -19,8 +21,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Meta />
                 <Links />
             </head>
-            <body>
-                <div className='dark h-full text-white bg-black'>
+            <body className='dark min-h-full'>
+                <div className='min-h-[100vh] dark flex flex-col h-full text-white bg-black'>
                     {children}
                 </div>
                 <ScrollRestoration />

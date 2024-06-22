@@ -1,4 +1,5 @@
 import { redirect, type MetaFunction } from '@remix-run/node'
+import Home from './home'
 
 export const meta: MetaFunction = () => {
     return [
@@ -7,13 +8,11 @@ export const meta: MetaFunction = () => {
     ]
 }
 
-export function loader() {
-    if (process.env.NODE_ENV === 'development') {
-        return {}
-    }
-    return redirect('https://github.com/remorses/docker-phobia')
-}
+// export function loader() {
+//     if (process.env.NODE_ENV === 'development') {
+//         return {}
+//     }
+//     return redirect('https://github.com/remorses/docker-phobia')
+// }
 
-export default function Index() {
-    return <div className=''></div>
-}
+export default Home
