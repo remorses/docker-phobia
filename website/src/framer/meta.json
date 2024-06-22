@@ -1,0 +1,1188 @@
+{
+  "inputs": {
+    "../../../node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js": {
+      "bytes": 30,
+      "imports": [],
+      "format": "esm"
+    },
+    "../../../node_modules/.pnpm/@jspm+core@2.0.1/node_modules/@jspm/core/nodelibs/browser/process.js": {
+      "bytes": 7074,
+      "imports": [
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../../node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js": {
+      "bytes": 36,
+      "imports": [
+        {
+          "path": "../../../node_modules/.pnpm/@jspm+core@2.0.1/node_modules/@jspm/core/nodelibs/browser/process.js",
+          "kind": "import-statement",
+          "original": "process"
+        }
+      ],
+      "format": "esm"
+    },
+    "../../../node_modules/.pnpm/@jspm+core@2.0.1/node_modules/@jspm/core/nodelibs/browser/buffer.js": {
+      "bytes": 68034,
+      "imports": [
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "../../../node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js": {
+      "bytes": 33,
+      "imports": [
+        {
+          "path": "../../../node_modules/.pnpm/@jspm+core@2.0.1/node_modules/@jspm/core/nodelibs/browser/buffer.js",
+          "kind": "import-statement",
+          "original": "buffer"
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/r4MwdB6MjpAiDn8TjVd2/yJhbXfEJ051y0IjvULuo/YXTleVdfY.js": {
+      "bytes": 12829,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js": {
+      "bytes": 10012,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/r4MwdB6MjpAiDn8TjVd2/yJhbXfEJ051y0IjvULuo/YXTleVdfY.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/r4MwdB6MjpAiDn8TjVd2/yJhbXfEJ051y0IjvULuo/YXTleVdfY.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "virtual:hero-search": {
+      "bytes": 536,
+      "imports": [
+        {
+          "path": "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js"
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framer.com/m/framer/icon-nullstate.js@0.7.0": {
+      "bytes": 1003,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framer.com/m/feather-icons/home.js@0.0.29": {
+      "bytes": 565,
+      "imports": [
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/Ma20hU0GGRxLxZphbywl/OSpwWF91FHPVFyQJjMHt/utils.js": {
+      "bytes": 2388,
+      "imports": [
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js": {
+      "bytes": 7244,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framer.com/m/framer/icon-nullstate.js@0.7.0",
+          "kind": "import-statement",
+          "original": "https://framer.com/m/framer/icon-nullstate.js@0.7.0"
+        },
+        {
+          "path": "https :https://framer.com/m/feather-icons/home.js@0.0.29",
+          "kind": "import-statement",
+          "original": "https://framer.com/m/feather-icons/home.js@0.0.29"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/Ma20hU0GGRxLxZphbywl/OSpwWF91FHPVFyQJjMHt/utils.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/Ma20hU0GGRxLxZphbywl/OSpwWF91FHPVFyQJjMHt/utils.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/PunbTAM0YOoCAxOb0Z6w/lJnVHZiW49Phqk9vljQr/dNJjz5Q4p.js": {
+      "bytes": 1310,
+      "imports": [
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/p7DiPlxwmZRnbXZprlOe/bQ4uYc60D38shC0lhya4/uMdppUE31.js": {
+      "bytes": 1680,
+      "imports": [
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/bB0biUaiQyPLYVvd9nIy/gEnhxoygtFxPWCDzCRgP/n_DVZNexF.js": {
+      "bytes": 18439,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/PunbTAM0YOoCAxOb0Z6w/lJnVHZiW49Phqk9vljQr/dNJjz5Q4p.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/PunbTAM0YOoCAxOb0Z6w/lJnVHZiW49Phqk9vljQr/dNJjz5Q4p.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/p7DiPlxwmZRnbXZprlOe/bQ4uYc60D38shC0lhya4/uMdppUE31.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/p7DiPlxwmZRnbXZprlOe/bQ4uYc60D38shC0lhya4/uMdppUE31.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/dIXoyGHlAhBtcbDyh1q8/9wfQBj1nDiWXPpTHHiVG/KcSL_pfvh.js": {
+      "bytes": 7269,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/ncTpzEiw3qNOep3VTZcG/3aEAyRlZV6QPh0MaDd3X/IV_7SD635.js": {
+      "bytes": 9606,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/p7DiPlxwmZRnbXZprlOe/bQ4uYc60D38shC0lhya4/uMdppUE31.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/p7DiPlxwmZRnbXZprlOe/bQ4uYc60D38shC0lhya4/uMdppUE31.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/5QRYlW5CrylEOId9f3t8/kB6rhuRIreqBukx9G4Ea/ucwWlX6GW.js": {
+      "bytes": 6703,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/v35u5dd2lSP2Ie8O8kut/g7M0rVQtXm0co9sclN9w/jAr6E0kPc.js": {
+      "bytes": 19421,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/bB0biUaiQyPLYVvd9nIy/gEnhxoygtFxPWCDzCRgP/n_DVZNexF.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/bB0biUaiQyPLYVvd9nIy/gEnhxoygtFxPWCDzCRgP/n_DVZNexF.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/dIXoyGHlAhBtcbDyh1q8/9wfQBj1nDiWXPpTHHiVG/KcSL_pfvh.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/dIXoyGHlAhBtcbDyh1q8/9wfQBj1nDiWXPpTHHiVG/KcSL_pfvh.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/ncTpzEiw3qNOep3VTZcG/3aEAyRlZV6QPh0MaDd3X/IV_7SD635.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/ncTpzEiw3qNOep3VTZcG/3aEAyRlZV6QPh0MaDd3X/IV_7SD635.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/5QRYlW5CrylEOId9f3t8/kB6rhuRIreqBukx9G4Ea/ucwWlX6GW.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/5QRYlW5CrylEOId9f3t8/kB6rhuRIreqBukx9G4Ea/ucwWlX6GW.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "virtual:nav": {
+      "bytes": 536,
+      "imports": [
+        {
+          "path": "https :https://framerusercontent.com/modules/v35u5dd2lSP2Ie8O8kut/g7M0rVQtXm0co9sclN9w/jAr6E0kPc.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/v35u5dd2lSP2Ie8O8kut/g7M0rVQtXm0co9sclN9w/jAr6E0kPc.js"
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/bJ4nouCX6S7ru7M3Mm9n/SL9GMj1xQQGeqnhpBgEj/jqK_GhKTO.js": {
+      "bytes": 14039,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "https :https://framerusercontent.com/modules/iQvupuYxJoIOXZmwWbPj/vzt1AdK4B7O19dy7GWAS/e4TNFUMUz.js": {
+      "bytes": 36324,
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/bJ4nouCX6S7ru7M3Mm9n/SL9GMj1xQQGeqnhpBgEj/jqK_GhKTO.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/bJ4nouCX6S7ru7M3Mm9n/SL9GMj1xQQGeqnhpBgEj/jqK_GhKTO.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/ncTpzEiw3qNOep3VTZcG/3aEAyRlZV6QPh0MaDd3X/IV_7SD635.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/ncTpzEiw3qNOep3VTZcG/3aEAyRlZV6QPh0MaDd3X/IV_7SD635.js"
+        },
+        {
+          "path": "https :https://framerusercontent.com/modules/5QRYlW5CrylEOId9f3t8/kB6rhuRIreqBukx9G4Ea/ucwWlX6GW.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/5QRYlW5CrylEOId9f3t8/kB6rhuRIreqBukx9G4Ea/ucwWlX6GW.js"
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    },
+    "virtual:footer": {
+      "bytes": 536,
+      "imports": [
+        {
+          "path": "https :https://framerusercontent.com/modules/iQvupuYxJoIOXZmwWbPj/vzt1AdK4B7O19dy7GWAS/e4TNFUMUz.js",
+          "kind": "import-statement",
+          "original": "https://framerusercontent.com/modules/iQvupuYxJoIOXZmwWbPj/vzt1AdK4B7O19dy7GWAS/e4TNFUMUz.js"
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/__dirname.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/buffer.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "/Users/morse/Documents/GitHub/docker-phobia/node_modules/.pnpm/esbuild-plugin-polyfill-node@0.3.0_esbuild@0.21.5/node_modules/esbuild-plugin-polyfill-node/polyfills/process.js",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "format": "esm"
+    }
+  },
+  "outputs": {
+    "hero-search.js": {
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "entryPoint": "virtual:hero-search",
+      "inputs": {
+        "https :https://framerusercontent.com/modules/lvEKKazLg6RBTN02u2mr/tvZxvakkRdoI2skxXgSf/rf_ckdRey.js": {
+          "bytesInOutput": 9215
+        },
+        "https :https://framerusercontent.com/modules/r4MwdB6MjpAiDn8TjVd2/yJhbXfEJ051y0IjvULuo/YXTleVdfY.js": {
+          "bytesInOutput": 11891
+        },
+        "virtual:hero-search": {
+          "bytesInOutput": 271
+        }
+      },
+      "bytes": 21772
+    },
+    "nav.js": {
+      "imports": [
+        {
+          "path": "chunk-HJZEKVSZ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "entryPoint": "virtual:nav",
+      "inputs": {
+        "https :https://framerusercontent.com/modules/v35u5dd2lSP2Ie8O8kut/g7M0rVQtXm0co9sclN9w/jAr6E0kPc.js": {
+          "bytesInOutput": 18463
+        },
+        "https :https://framerusercontent.com/modules/bB0biUaiQyPLYVvd9nIy/gEnhxoygtFxPWCDzCRgP/n_DVZNexF.js": {
+          "bytesInOutput": 16864
+        },
+        "https :https://framerusercontent.com/modules/PunbTAM0YOoCAxOb0Z6w/lJnVHZiW49Phqk9vljQr/dNJjz5Q4p.js": {
+          "bytesInOutput": 907
+        },
+        "https :https://framerusercontent.com/modules/dIXoyGHlAhBtcbDyh1q8/9wfQBj1nDiWXPpTHHiVG/KcSL_pfvh.js": {
+          "bytesInOutput": 6718
+        },
+        "virtual:nav": {
+          "bytesInOutput": 263
+        }
+      },
+      "bytes": 44016
+    },
+    "footer.js": {
+      "imports": [
+        {
+          "path": "chunk-HJZEKVSZ.js",
+          "kind": "import-statement"
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "entryPoint": "virtual:footer",
+      "inputs": {
+        "https :https://framerusercontent.com/modules/iQvupuYxJoIOXZmwWbPj/vzt1AdK4B7O19dy7GWAS/e4TNFUMUz.js": {
+          "bytesInOutput": 35648
+        },
+        "https :https://framerusercontent.com/modules/bJ4nouCX6S7ru7M3Mm9n/SL9GMj1xQQGeqnhpBgEj/jqK_GhKTO.js": {
+          "bytesInOutput": 13114
+        },
+        "virtual:footer": {
+          "bytesInOutput": 266
+        }
+      },
+      "bytes": 49494
+    },
+    "chunk-HJZEKVSZ.js": {
+      "imports": [
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react/jsx-runtime",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "unframer",
+          "kind": "import-statement",
+          "external": true
+        },
+        {
+          "path": "react",
+          "kind": "import-statement",
+          "external": true
+        }
+      ],
+      "exports": [
+        "Icon",
+        "className",
+        "css",
+        "fonts",
+        "stdin_default",
+        "stdin_default2"
+      ],
+      "inputs": {
+        "https :https://framerusercontent.com/modules/ncTpzEiw3qNOep3VTZcG/3aEAyRlZV6QPh0MaDd3X/IV_7SD635.js": {
+          "bytesInOutput": 8550
+        },
+        "https :https://framerusercontent.com/modules/f0DboytQenYh21kfme7W/zb1zVBMZJKgPMiedOi0y/Feather.js": {
+          "bytesInOutput": 6388
+        },
+        "https :https://framer.com/m/framer/icon-nullstate.js@0.7.0": {
+          "bytesInOutput": 567
+        },
+        "https :https://framer.com/m/feather-icons/home.js@0.0.29": {
+          "bytesInOutput": 538
+        },
+        "https :https://framerusercontent.com/modules/Ma20hU0GGRxLxZphbywl/OSpwWF91FHPVFyQJjMHt/utils.js": {
+          "bytesInOutput": 1125
+        },
+        "https :https://framerusercontent.com/modules/p7DiPlxwmZRnbXZprlOe/bQ4uYc60D38shC0lhya4/uMdppUE31.js": {
+          "bytesInOutput": 1274
+        },
+        "https :https://framerusercontent.com/modules/5QRYlW5CrylEOId9f3t8/kB6rhuRIreqBukx9G4Ea/ucwWlX6GW.js": {
+          "bytesInOutput": 6279
+        }
+      },
+      "bytes": 25648
+    }
+  }
+}

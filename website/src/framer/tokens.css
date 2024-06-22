@@ -1,0 +1,12 @@
+/* This css file contains your color variables, sometimes these get desynced when updated in Framer so it's good that you copy and paste this snippet into your app css */
+/* Bug: https://www.framer.community/c/bugs/color-style-unlinks-when-copying-component-between-projects-resulting-in-potential-value-discrepancy */
+:root {
+    /* Used by footer.js, hero-search.js, nav.js */
+    --token-b50174c0-f355-49d1-a882-48c9e51b5466: rgb(255, 255, 255); 
+    /* Used by footer.js, nav.js */
+    --token-c46c0c2d-e53e-42e7-8f54-be852f62337f: #e0e8d2; /* Also seen as rgb(224, 232, 210). */
+    --token-a05655a1-e6dd-4d69-a82a-f5054b601f79: rgb(193, 255, 86); /* Named as "Theme Color 01" in Framer. */
+    /* Used by nav.js */
+    --token-ff9d48bd-ec1e-45fc-b308-fcfb34b4089f: rgb(8, 8, 7); 
+    --token-4bd7eeba-669e-49ab-85d5-91da45add9b3: rgb(21, 21, 20); 
+}

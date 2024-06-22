@@ -1,0 +1,10 @@
+{
+    "schema": "https://unframer-schema.vercel.app/schema.json",
+    "outDir": "./src/framer",
+    "components": {
+        // add here your Framer components urls, the code will be written to outDir/{componentName}.js
+        "hero-search": "https://framer.com/m/HeroAndSearch-U5hA.js",
+        "nav": "https://framer.com/m/Navigation-rNOl.js",
+        "footer": "https://framer.com/m/Footer-UhJg.js"
+    }
+}
