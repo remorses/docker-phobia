@@ -8,11 +8,11 @@ export const meta: MetaFunction = () => {
     ]
 }
 
-// export function loader() {
-//     if (process.env.NODE_ENV === 'development') {
-//         return {}
-//     }
-//     return redirect('https://github.com/remorses/docker-phobia')
-// }
+export function loader() {
+    if (process.env.NODE_ENV === 'development') {
+        return {}
+    }
+    return redirect('https://github.com/remorses/docker-phobia')
+}
 
 export default Home

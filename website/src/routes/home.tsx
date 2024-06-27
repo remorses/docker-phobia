@@ -2,7 +2,7 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import NavFramerComponent from '../framer/nav'
 import HeroSearchFramerComponent from '../framer/hero-search'
 import FooterFramerComponent from '../framer/footer'
-import { Form, useNavigation } from '@remix-run/react'
+import { Form, redirect, useNavigation } from '@remix-run/react'
 import { sleep } from '../lib/utils'
 
 export const meta: MetaFunction = () => {
@@ -16,10 +16,15 @@ export const meta: MetaFunction = () => {
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-    console.log(await request.formData())
-    await sleep(1000)
-    return { title: 'Crispy Raycast' }
+    const data = await request.formData()
+    const query = data.get('query')
+    if (!query) {
+        return
+    }
+    return redirect(`/remote/image/${query}`)
 }
+
+
 
 export default function Index() {
     const nav = useNavigation()
