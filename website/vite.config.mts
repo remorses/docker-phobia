@@ -4,7 +4,6 @@ import Inspect from 'vite-plugin-inspect'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import EnvironmentPlugin from 'vite-plugin-environment'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
-import nodeResolve from '@rollup/plugin-node-resolve'
 
 const building = process.env.NODE_ENV === 'production'
 
