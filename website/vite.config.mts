@@ -1,33 +1,42 @@
 import { vitePlugin as remix } from '@remix-run/dev'
-import { installGlobals } from '@remix-run/node'
 import { defineConfig } from 'vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 import Inspect from 'vite-plugin-inspect'
+import tsconfigPaths from 'vite-tsconfig-paths'
+import EnvironmentPlugin from 'vite-plugin-environment'
 import { cjsInterop } from 'vite-plugin-cjs-interop'
+import nodeResolve from '@rollup/plugin-node-resolve'
 
 const building = process.env.NODE_ENV === 'production'
 
 export default defineConfig({
-    ssr: {
-        // optimizeDeps: {
-        //     include: ['react-spinners'],
-        //     needsInterop: ['react-spinners'],
-        // },
+    clearScreen: false,
+    plugins: [
+        Inspect(),
 
+        remix({
+            appDirectory: 'src',
+
+            future: {
+                v3_fetcherPersist: true,
+                v3_relativeSplatPath: true,
+                v3_throwAbortReason: true,
+            },
+        }),
+        tsconfigPaths(),
+        EnvironmentPlugin('all', { prefix: 'PUBLIC_' }),
+        cjsInterop({ dependencies: ['react-spinners/BarLoader'] }),
+    ],
+
+    ssr: {
         noExternal: building || undefined,
-    },
-    experimental: {
-        // skipSsrTransform: true,
+        external: building ? ['@prisma/client'] : undefined,
     },
     legacy: {
         proxySsrExternalModules: true,
     },
-    plugins: [
-        // nodeLoaderPlugin(),
-        // commonjs(),
-        cjsInterop({ dependencies: ['react-spinners/BarLoader'] }),
-        Inspect(),
-        remix({ appDirectory: 'src' }),
-        tsconfigPaths(),
-    ],
+    build: {
+        commonjsOptions: {
+            transformMixedEsModules: true,
+        },
+    },
 })
