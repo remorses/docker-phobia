@@ -3,8 +3,11 @@ import Home from './home'
 
 export const meta: MetaFunction = () => {
     return [
-        { title: 'New Remix App' },
-        { name: 'description', content: 'Welcome to Remix!' },
+        { title: 'Docker Phobia' },
+        {
+            name: 'description',
+            content: 'Visualize any Docker image file size',
+        },
     ]
 }
 
