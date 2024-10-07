@@ -101,7 +101,7 @@ export default function Home({}) {
     }
     return (
         <Suspense>
-            <div className='flex h-full p-8 flex-col gap-6 w-full'>
+            <div className='flex h-full grow p-8 flex-col gap-6 w-full'>
                 <div className='w-full flex text-sm flex-col gap-4 font-mono'>
                     <div className=''>Image: {imageStr}</div>
 
@@ -129,7 +129,7 @@ export default function Home({}) {
                         </button>
                     }
                 </div>
-                <PassComponentSize className='grow'>
+                <PassComponentSize className='grow flex flex-col'>
                     {({ width, height }) => (
                         <TreemapDemo
                             width={width}
@@ -148,6 +148,7 @@ function PassComponentSize({ children, ...rest }) {
     const ref = useRef<HTMLDivElement>(null)
     const { width, height } = useElemSize(ref)
     if (!width || !height) {
+        console.log('passcomponentsize', width, height)
         return <div key='parent' ref={ref} {...rest} />
     }
     return (
