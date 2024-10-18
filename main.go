@@ -37,10 +37,18 @@ import (
 	"github.com/wagoodman/dive/dive/image"
 )
 
+var defaultPort = 8080
+
 func main() {
 	app := &cli.App{
 		Name:  "docker-phobia",
 		Usage: "Analyze a Docker image",
+		Flags: []cli.Flag{
+			&cli.BoolFlag{
+				Name:  "tunnel",
+				Usage: "Start a tunnel for remote access using cloudflared",
+			},
+		},
 		Action: func(c *cli.Context) error {
 			var selectedImage string
 			ctx := context.Background()
@@ -91,14 +99,16 @@ func main() {
 
 			selectedImage = strings.TrimSpace(selectedImage)
 
-			go func() {
-				url, err := createTempTunnel("localhost:8080")
-				if err != nil {
-					fmt.Println("Error creating tunnel:", err)
-					return
-				}
-				fmt.Println("Tunnel created:", url)
-			}()
+			if c.Bool("tunnel") {
+				go func() {
+					url, err := createTempTunnel(fmt.Sprintf("localhost:%d", defaultPort))
+					if err != nil {
+						fmt.Println("Error creating tunnel:", err)
+						return
+					}
+					fmt.Println("Tunnel created:", url)
+				}()
+			}
 			serveWebsite(selectedImage)
 
 			// Process the chosen Docker image
@@ -600,6 +610,7 @@ func downloadCloudflared() (string, error) {
 
 	return cloudflaredPath, nil
 }
+
 func createTempTunnel(localURL string) (string, error) {
 	cloudflaredPath, err := downloadCloudflared()
 	println("creating tunnel with ", cloudflaredPath)
@@ -645,6 +656,18 @@ func createTempTunnel(localURL string) (string, error) {
 	// The tunnel will remain active as long as this process is running
 	go func() {
 		cmd.Wait()
+	}()
+
+	// Handle the case where the current process is killed
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		fmt.Println("Shutting down tunnel...")
+		if err := cmd.Process.Kill(); err != nil {
+			fmt.Printf("Failed to kill tunnel process: %v\n", err)
+		}
+		os.Exit(0)
 	}()
 
 	return tunnelURL, nil
