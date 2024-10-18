@@ -627,6 +627,7 @@ func downloadCloudflared() (string, error) {
 
 	return cloudflaredPath, nil
 }
+
 func createTempTunnel(localURL string, urlChan chan<- string) error {
 	cloudflaredPath, err := downloadCloudflared()
 	println("creating tunnel with", cloudflaredPath)
@@ -676,15 +677,20 @@ func createTempTunnel(localURL string, urlChan chan<- string) error {
 
 func scanForURL(r io.Reader, urlChan chan<- string) {
 	scanner := bufio.NewScanner(r)
+	urlSent := false
 	for scanner.Scan() {
 		line := scanner.Text()
-		if strings.Contains(line, "https://") && strings.Contains(line, "trycloudflare.com") {
+		fmt.Println(line)
+		if !urlSent && strings.Contains(line, "https://") && strings.Contains(line, "trycloudflare.com") {
 			url := extractURL(line)
 			if url != "" {
 				urlChan <- url
-				return
+				urlSent = true
 			}
 		}
+	}
+	if err := scanner.Err(); err != nil {
+		fmt.Fprintf(os.Stderr, "Error reading input: %v\n", err) // Log any errors to stderr
 	}
 }
 
