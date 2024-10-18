@@ -99,17 +99,30 @@ func main() {
 
 			selectedImage = strings.TrimSpace(selectedImage)
 
+			urlChan := make(chan string)
 			if c.Bool("tunnel") {
 				go func() {
-					url, err := createTempTunnel(fmt.Sprintf("localhost:%d", defaultPort))
+					err := createTempTunnel(fmt.Sprintf("localhost:%d", defaultPort), urlChan)
 					if err != nil {
 						fmt.Println("Error creating tunnel:", err)
 						return
 					}
-					fmt.Println("Tunnel created:", url)
 				}()
+				select {
+				case url := <-urlChan:
+
+					fmt.Printf("Tunnel URL: %s\n", url)
+					// Wait for a second before serving the website
+					time.Sleep(1 * time.Second)
+					serveWebsite(selectedImage, url)
+				case <-time.After(30 * time.Second):
+					fmt.Println("Timeout waiting for tunnel URL")
+				}
+
+			} else {
+				serveWebsite(selectedImage, "")
+
 			}
-			serveWebsite(selectedImage)
 
 			// Process the chosen Docker image
 			return nil
@@ -123,8 +136,7 @@ func main() {
 	}
 
 }
-
-func serveWebsite(imageStr string) {
+func serveWebsite(imageStr string, tunnelUrl string) {
 	router := mux.NewRouter()
 
 	router.Use(enableCORS)
@@ -157,7 +169,12 @@ func serveWebsite(imageStr string) {
 	if baseURL == "" {
 		baseURL = "https://docker-phobia.vercel.app"
 	}
-	path := "/image/" + imageStr + "?port=" + strconv.Itoa(port)
+	path := "/image/" + imageStr
+	if tunnelUrl != "" {
+		path += "?url=" + url.QueryEscape(tunnelUrl)
+	} else {
+		path += "?port=" + strconv.Itoa(port)
+	}
 	println("opening the browser at", baseURL+path)
 	err = openBrowser(baseURL + path)
 	if err != nil {
@@ -169,7 +186,6 @@ func serveWebsite(imageStr string) {
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 	<-sigChan
 	os.Exit(0)
-
 }
 
 func openBrowser(url string) error {
@@ -610,48 +626,32 @@ func downloadCloudflared() (string, error) {
 
 	return cloudflaredPath, nil
 }
-
-func createTempTunnel(localURL string) (string, error) {
+func createTempTunnel(localURL string, urlChan chan<- string) error {
 	cloudflaredPath, err := downloadCloudflared()
-	println("creating tunnel with ", cloudflaredPath)
+	println("creating tunnel with", cloudflaredPath)
 	if err != nil {
-		return "", err
+		return err
 	}
 	cmd := exec.Command(cloudflaredPath, "tunnel", "--url", localURL)
 
-	// Set up pipes to capture and stream the command's stdout and stderr
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	// Set up pipes to capture the command's stdout and stderr
+	stdoutPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		return err
+	}
+	stderrPipe, err := cmd.StderrPipe()
+	if err != nil {
+		return err
+	}
 
 	// Start the command
 	if err := cmd.Start(); err != nil {
-		return "", err
+		return err
 	}
 
-	// Create a channel to signal when we've found the tunnel URL
-	foundURL := make(chan string)
-
-	// Start a goroutine to scan the output for the tunnel URL
-	go func() {
-		scanner := bufio.NewScanner(os.Stdout)
-		for scanner.Scan() {
-			line := scanner.Text()
-			if strings.Contains(line, "https://") {
-				tunnelURL := strings.TrimSpace(strings.Split(line, "|")[0])
-				foundURL <- tunnelURL
-				break
-			}
-		}
-	}()
-
-	// Wait for the tunnel URL or timeout
-	var tunnelURL string
-	select {
-	case tunnelURL = <-foundURL:
-		fmt.Printf("Tunnel created: %s\n", tunnelURL)
-	case <-time.After(30 * time.Second):
-		return "", fmt.Errorf("timeout waiting for tunnel URL")
-	}
+	// Start goroutines to scan the output for the tunnel URL
+	go scanForURL(stdoutPipe, urlChan)
+	go scanForURL(stderrPipe, urlChan)
 
 	// The tunnel will remain active as long as this process is running
 	go func() {
@@ -670,5 +670,29 @@ func createTempTunnel(localURL string) (string, error) {
 		os.Exit(0)
 	}()
 
-	return tunnelURL, nil
+	return nil
+}
+
+func scanForURL(r io.Reader, urlChan chan<- string) {
+	scanner := bufio.NewScanner(r)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.Contains(line, "https://") && strings.Contains(line, "trycloudflare.com") {
+			url := extractURL(line)
+			if url != "" {
+				urlChan <- url
+				return
+			}
+		}
+	}
+}
+
+func extractURL(line string) string {
+	words := strings.Fields(line)
+	for _, word := range words {
+		if strings.HasPrefix(word, "https://") && strings.HasSuffix(word, "trycloudflare.com") {
+			return word
+		}
+	}
+	return ""
 }

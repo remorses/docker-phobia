@@ -1,4 +1,3 @@
-
 // import { BarLoader } from 'react-spinners'
 import BarLoader from 'react-spinners/BarLoader'
 // console.log('BarLoader', BarLoader)
@@ -11,19 +10,54 @@ import { TreemapDemo } from 'website/src/lib/visx'
 import { formatFileSize } from 'website/src/lib/utils'
 import { useNavigate, useParams, useSearchParams } from '@remix-run/react'
 
-async function analyzeImage({ image, port }) {
-    const baseUrl = new URL('http://localhost:' + port)
+const fetchWithRetry = async (
+    url: string,
+    options: RequestInit,
+    maxRetries = 3,
+    delay = 1000,
+) => {
+    for (let i = 0; i < maxRetries; i++) {
+        try {
+            const response = await fetch(url, options)
+            if (response.ok) {
+                return response
+            }
+            if (!response.ok && i === maxRetries - 1) {
+                const errorText = await response.text()
+                throw new Error(
+                    `Failed to fetch: ${response.status} - ${errorText}`,
+                )
+            }
+        } catch (error) {
+            console.error(`Attempt ${i + 1} failed:`, error)
+        }
 
+        if (i < maxRetries - 1) {
+            console.log(`Retrying in ${delay / 1000} seconds...`)
+            await new Promise((resolve) => setTimeout(resolve, delay))
+        }
+    }
+
+    throw new Error(`Failed to fetch after ${maxRetries} attempts`)
+}
+
+async function analyzeImage({ image, port, tunnelUrl }) {
+    const baseUrl = tunnelUrl
+        ? new URL(tunnelUrl)
+        : new URL('http://localhost:' + port)
+
+    if (tunnelUrl) {
+        console.log('using url', baseUrl.toString())
+    }
     const u = new URL('/analyze/' + encodeURIComponent(image), baseUrl)
 
     console.log('fetching', u.toString())
-    const response = await fetch(u, {
+    const response = await fetchWithRetry(u.toString(), {
         method: 'POST',
     })
     if (!response.ok) {
         throw new Error(
-            'Failed to analyze image ${response.status}: ' +
-                (await response.text()),
+            `Failed to analyze image ${response.status}: ${await response.text()}`,
         )
     }
     return response.json() as any as JsonOutput
@@ -47,6 +81,7 @@ export default function Home({}) {
     const [searchParams] = useSearchParams()
     const imageStr = params['*'] as string
     const port = (searchParams.get('port') as string) || '8080'
+    const tunnelUrl = searchParams.get('url') || ''
 
     const [error, setError] = useState<string>()
     const [data, setData] = useState<any>()
@@ -59,11 +94,12 @@ export default function Home({}) {
             const { tree, layers } = await analyzeImage({
                 image: imageStr,
                 port,
+                tunnelUrl,
             })
             setData({ tree, layers })
         }
         get().catch((e) => setError(e.message))
-    }, [port, imageStr])
+    }, [port, tunnelUrl, imageStr])
     const navigate = useNavigate()
     const { tree, layers } = data || {}
 
