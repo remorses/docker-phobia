@@ -57,6 +57,16 @@ func main() {
 				return err
 			}
 
+			urlChan := make(chan string)
+			if c.Bool("tunnel") {
+				go func() {
+					err := createTempTunnel(fmt.Sprintf("localhost:%d", defaultPort), urlChan)
+					if err != nil {
+						fmt.Println("Error creating tunnel:", err)
+						return
+					}
+				}()
+			}
 			if c.NArg() > 0 {
 				selectedImage = c.Args().Get(0)
 			} else {
@@ -99,15 +109,7 @@ func main() {
 
 			selectedImage = strings.TrimSpace(selectedImage)
 
-			urlChan := make(chan string)
 			if c.Bool("tunnel") {
-				go func() {
-					err := createTempTunnel(fmt.Sprintf("localhost:%d", defaultPort), urlChan)
-					if err != nil {
-						fmt.Println("Error creating tunnel:", err)
-						return
-					}
-				}()
 				select {
 				case url := <-urlChan:
 
@@ -121,7 +123,6 @@ func main() {
 
 			} else {
 				serveWebsite(selectedImage, "")
-
 			}
 
 			// Process the chosen Docker image
