@@ -1,10 +1,14 @@
 package main
 
 import (
+	"archive/tar"
+	"bufio"
 	"bytes"
+	"compress/gzip"
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net"
 	"net/http"
@@ -12,6 +16,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"path/filepath"
 	"runtime"
 	"sort"
 	"strconv"
@@ -86,6 +91,14 @@ func main() {
 
 			selectedImage = strings.TrimSpace(selectedImage)
 
+			go func() {
+				url, err := createTempTunnel("localhost:8080")
+				if err != nil {
+					fmt.Println("Error creating tunnel:", err)
+					return
+				}
+				fmt.Println("Tunnel created:", url)
+			}()
 			serveWebsite(selectedImage)
 
 			// Process the chosen Docker image
@@ -473,4 +486,166 @@ func findOpenPort() (int, error) {
 	}
 	defer l.Close()
 	return l.Addr().(*net.TCPAddr).Port, nil
+}
+
+func downloadCloudflared() (string, error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	cloudflaredPath := filepath.Join(homeDir, ".docker-phobia", "cloudflared")
+
+	// Check if the file already exists
+	if _, err := os.Stat(cloudflaredPath); err == nil {
+		return cloudflaredPath, nil
+	}
+
+	println("downloading cloudflared to " + cloudflaredPath)
+	// Ensure the directory exists
+	if err := os.MkdirAll(filepath.Dir(cloudflaredPath), 0755); err != nil {
+		return "", err
+	}
+
+	// Determine the correct binary based on the current platform
+	var binaryName string
+	switch runtime.GOOS {
+	case "darwin":
+		if runtime.GOARCH == "amd64" {
+			binaryName = "cloudflared-darwin-amd64.tgz"
+		} else if runtime.GOARCH == "arm64" {
+			binaryName = "cloudflared-darwin-arm64.tgz"
+		}
+	case "linux":
+		if runtime.GOARCH == "amd64" {
+			binaryName = "cloudflared-linux-amd64"
+		} else if runtime.GOARCH == "386" {
+			binaryName = "cloudflared-linux-386"
+		} else if runtime.GOARCH == "arm" {
+			binaryName = "cloudflared-linux-arm"
+		} else if runtime.GOARCH == "arm64" {
+			binaryName = "cloudflared-linux-arm64"
+		}
+	case "windows":
+		if runtime.GOARCH == "amd64" {
+			binaryName = "cloudflared-windows-amd64.exe"
+		} else if runtime.GOARCH == "386" {
+			binaryName = "cloudflared-windows-386.exe"
+		}
+	}
+
+	if binaryName == "" {
+		return "", fmt.Errorf("unsupported platform: %s/%s", runtime.GOOS, runtime.GOARCH)
+	}
+
+	// Download the binary
+	url := fmt.Sprintf("https://github.com/cloudflare/cloudflared/releases/latest/download/%s", binaryName)
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("failed to download cloudflared: %s", resp.Status)
+	}
+
+	// If it's a .tgz file, we need to extract it
+	if strings.HasSuffix(binaryName, ".tgz") {
+		gzr, err := gzip.NewReader(resp.Body)
+		if err != nil {
+			return "", err
+		}
+		defer gzr.Close()
+
+		tr := tar.NewReader(gzr)
+		for {
+			header, err := tr.Next()
+			if err == io.EOF {
+				break
+			}
+			if err != nil {
+				return "", err
+			}
+
+			if header.Typeflag == tar.TypeReg && filepath.Base(header.Name) == "cloudflared" {
+				out, err := os.OpenFile(cloudflaredPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+				if err != nil {
+					return "", err
+				}
+				defer out.Close()
+
+				if _, err := io.Copy(out, tr); err != nil {
+					return "", err
+				}
+				break
+			}
+		}
+	} else {
+		// For non-tgz files, write directly to the file
+		out, err := os.OpenFile(cloudflaredPath, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+		if err != nil {
+			return "", err
+		}
+		defer out.Close()
+
+		if _, err := io.Copy(out, resp.Body); err != nil {
+			return "", err
+		}
+	}
+
+	// Make the file executable (this is a no-op on Windows)
+	if err := os.Chmod(cloudflaredPath, 0755); err != nil {
+		return "", err
+	}
+
+	return cloudflaredPath, nil
+}
+func createTempTunnel(localURL string) (string, error) {
+	cloudflaredPath, err := downloadCloudflared()
+	println("creating tunnel with ", cloudflaredPath)
+	if err != nil {
+		return "", err
+	}
+	cmd := exec.Command(cloudflaredPath, "tunnel", "--url", localURL)
+
+	// Set up pipes to capture and stream the command's stdout and stderr
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	// Start the command
+	if err := cmd.Start(); err != nil {
+		return "", err
+	}
+
+	// Create a channel to signal when we've found the tunnel URL
+	foundURL := make(chan string)
+
+	// Start a goroutine to scan the output for the tunnel URL
+	go func() {
+		scanner := bufio.NewScanner(os.Stdout)
+		for scanner.Scan() {
+			line := scanner.Text()
+			if strings.Contains(line, "https://") {
+				tunnelURL := strings.TrimSpace(strings.Split(line, "|")[0])
+				foundURL <- tunnelURL
+				break
+			}
+		}
+	}()
+
+	// Wait for the tunnel URL or timeout
+	var tunnelURL string
+	select {
+	case tunnelURL = <-foundURL:
+		fmt.Printf("Tunnel created: %s\n", tunnelURL)
+	case <-time.After(30 * time.Second):
+		return "", fmt.Errorf("timeout waiting for tunnel URL")
+	}
+
+	// The tunnel will remain active as long as this process is running
+	go func() {
+		cmd.Wait()
+	}()
+
+	return tunnelURL, nil
 }
